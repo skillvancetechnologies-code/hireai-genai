@@ -1,0 +1,20 @@
+[
+  {
+    "id": "copilot_001",
+    "input": {
+      "query": "Show top 5 Python developers for JOB0012"
+    },
+    "expected": {
+      "candidate_ids": ["CAND0001", "CAND0042", "CAND0099"]
+    }
+  },
+  {
+    "id": "copilot_002",
+    "input": {
+      "query": "Who has React and Node.js with 2+ years?"
+    },
+    "expected": {
+      "candidate_ids": ["CAND0007", "CAND0023"]
+    }
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m pytest app/tests/ -v)",
+      "Bash(python scripts/run_evals.py --all)",
+      "Bash(python scripts/nightly.py)",
+      "Bash(python scripts/check_infra.py)",
+      "Bash(echo \"exit: $?\")"
+    ]
+  }
+}

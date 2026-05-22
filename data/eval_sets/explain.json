@@ -1,0 +1,26 @@
+[
+  {
+    "id": "explain_001",
+    "input": {
+      "candidate_id": "CAND0001",
+      "job_id": "JOB0012"
+    },
+    "expected": {
+      "factual": 3,
+      "clear": 3,
+      "unbiased": 3
+    }
+  },
+  {
+    "id": "explain_002",
+    "input": {
+      "candidate_id": "CAND0042",
+      "job_id": "JOB0003"
+    },
+    "expected": {
+      "factual": 3,
+      "clear": 3,
+      "unbiased": 3
+    }
+  }
+]
