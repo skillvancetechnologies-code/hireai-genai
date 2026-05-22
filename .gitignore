@@ -18,3 +18,4 @@ data/eval_sets/parser.json
 .DS_Store
 .idea/
 .vscode/
+.claude/
