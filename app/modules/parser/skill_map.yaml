@@ -1,0 +1,190 @@
+# Canonical skill name: [variations]
+
+React:
+  - React.js
+  - ReactJS
+  - React JS
+  - react
+
+PostgreSQL:
+  - Postgres
+  - postgres
+  - PSQL
+  - psql
+
+JavaScript:
+  - JS
+  - Javascript
+  - ECMAScript
+  - java script
+
+TypeScript:
+  - TS
+  - Typescript
+
+Python:
+  - python
+  - Python3
+  - Py
+
+Node.js:
+  - NodeJS
+  - Node JS
+  - node
+  - node.js
+
+MongoDB:
+  - Mongo
+  - mongo
+  - mongoDB
+
+MySQL:
+  - mysql
+  - My SQL
+  - mySQL
+
+HTML:
+  - HTML5
+  - html
+  - html5
+
+CSS:
+  - CSS3
+  - css
+  - css3
+
+Git:
+  - git
+  - GIT
+  - Version Control
+
+GitHub:
+  - Github
+  - github
+  - GithHub
+
+Java:
+  - java
+  - JAVA
+  - Core Java
+  - core java
+
+Flutter:
+  - flutter
+  - FLUTTER
+
+Dart:
+  - dart
+  - DART
+
+Firebase:
+  - firebase
+  - FIREBASE
+  - Firebase Cloud
+
+REST API:
+  - RESTful API
+  - REST APIs
+  - RESTful APIs
+  - REST API Integration
+  - RESTful API Integration
+  - REST
+
+FastAPI:
+  - fastapi
+  - Fast API
+
+Spring Boot:
+  - SpringBoot
+  - spring boot
+  - Springboot
+
+Hibernate:
+  - hibernate
+  - JPA
+  - Hibernate/JPA
+
+SQL:
+  - sql
+  - SQL Query
+  - MySQL SQL
+
+Power BI:
+  - PowerBI
+  - power bi
+  - powerbi
+
+Tableau:
+  - tableau
+  - TABLEAU
+
+Docker:
+  - docker
+  - DOCKER
+
+Kubernetes:
+  - K8s
+  - k8s
+  - kubernetes
+
+AWS:
+  - Amazon Web Services
+  - amazon web services
+
+LangChain:
+  - Langchain
+  - langchain
+
+TensorFlow:
+  - Tensorflow
+  - tensorflow
+  - TF
+
+PyTorch:
+  - Pytorch
+  - pytorch
+
+Scikit-learn:
+  - sklearn
+  - scikit learn
+  - Sklearn
+
+Pandas:
+  - pandas
+  - PANDAS
+
+NumPy:
+  - numpy
+  - Numpy
+
+CI/CD:
+  - CI/CD pipelines
+  - CI-CD
+  - cicd
+  - GitHub Actions
+
+Postman:
+  - postman
+  - POSTMAN
+
+VS Code:
+  - VSCode
+  - vscode
+  - Visual Studio Code
+
+NLP:
+  - Natural Language Processing
+  - natural language processing
+
+OpenAI API:
+  - OpenAI
+  - openai
+
+Excel:
+  - MS Excel
+  - Microsoft Excel
+  - excel
+
+Figma:
+  - figma
+  - FIGMA
