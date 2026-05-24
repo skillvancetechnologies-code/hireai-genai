@@ -18,12 +18,15 @@ from app.core.config import get_settings
 log = logging.getLogger(__name__)
 _settings = get_settings()
 
-# Pricing in USD per 1M tokens (input, output). Update as needed.
+# Pricing in USD per 1M tokens (input, output).
+# Local Ollama models cost $0 — entries kept for cost log consistency.
 PRICING: dict[str, tuple[float, float]] = {
-    "gpt-4o-mini": (0.150, 0.600),
-    "gpt-4o": (2.500, 10.000),
-    "gpt-4-turbo": (10.000, 30.000),
-    "gemini-1.5-flash": (0.075, 0.300),
+    "gemma3:4b": (0.0, 0.0),
+    "gemma3:12b": (0.0, 0.0),
+    "gemma3:27b": (0.0, 0.0),
+    "llama3.2:3b": (0.0, 0.0),
+    "llama3.1:8b": (0.0, 0.0),
+    "mistral:7b": (0.0, 0.0),
 }
 
 

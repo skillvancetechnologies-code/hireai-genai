@@ -138,11 +138,11 @@ def test_no_regression_when_stable(monkeypatch, tmp_path):
 def test_budget_exceeded_blocks_openai_call(monkeypatch):
     monkeypatch.setattr(llm, "project_total", lambda: 999.0)
     monkeypatch.setattr(llm._settings, "project_spend_cap_usd", 200.0)
-    # If we reach _call_openai, the test fails.
-    monkeypatch.setattr(llm, "_call_openai",
+    # If we reach _call_ollama, the test fails.
+    monkeypatch.setattr(llm, "_call_ollama",
                         lambda *a, **k: pytest.fail("should not be called"))
     with pytest.raises(llm.BudgetExceeded):
-        llm.llm_call("anything", model="gpt-4o-mini",
+        llm.llm_call("anything", model="gemma3:4b",
                      module="test", cache=False)
 
 
@@ -151,9 +151,9 @@ def test_budget_guard_allows_cache_hits(monkeypatch):
     cache.cache_set("budget:test:key", "cached-value", ttl=60)
     monkeypatch.setattr(llm, "project_total", lambda: 999.0)
     monkeypatch.setattr(llm._settings, "project_spend_cap_usd", 200.0)
-    monkeypatch.setattr(llm, "_call_openai",
+    monkeypatch.setattr(llm, "_call_ollama",
                         lambda *a, **k: pytest.fail("should not hit API"))
-    out = llm.llm_call("ignored", model="gpt-4o-mini", module="test",
+    out = llm.llm_call("ignored", model="gemma3:4b", module="test",
                        cache=True, cache_key="budget:test:key")
     assert out == "cached-value"
 

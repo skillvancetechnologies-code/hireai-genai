@@ -1,190 +1,377 @@
-# Canonical skill name: [variations]
+# Skill canonicalization map.
+# Format — canonical_name: [list of aliases (case-insensitive)]
+# Add aliases freely; bump this file in PRs that extend the map.
 
+# ── Frontend ─────────────────────────────────────────────────────────────────
 React:
   - React.js
   - ReactJS
   - React JS
   - react
-
-PostgreSQL:
-  - Postgres
-  - postgres
-  - PSQL
-  - psql
-
+  - Reactjs
+  - react.js
+Vue.js:
+  - Vue
+  - VueJS
+  - Vue JS
+  - vue
+  - Vue3
+  - Vuejs
+  - Vue.js
+Angular:
+  - AngularJS
+  - Angular.js
+  - angular
+  - Angular2+
+  - Angular 2
 JavaScript:
   - JS
   - Javascript
   - ECMAScript
+  - ES6
+  - ES2015
   - java script
-
+  - es6
 TypeScript:
   - TS
   - Typescript
-
-Python:
-  - python
-  - Python3
-  - Py
-
-Node.js:
-  - NodeJS
-  - Node JS
-  - node
-  - node.js
-
-MongoDB:
-  - Mongo
-  - mongo
-  - mongoDB
-
-MySQL:
-  - mysql
-  - My SQL
-  - mySQL
-
+  - typescript
 HTML:
   - HTML5
   - html
   - html5
-
+  - HyperText Markup Language
 CSS:
   - CSS3
   - css
   - css3
+  - Cascading Style Sheets
+Sass:
+  - SCSS
+  - sass
+  - scss
+Next.js:
+  - NextJS
+  - Next JS
+  - nextjs
+  - next.js
+  - Next
+Tailwind CSS:
+  - Tailwind
+  - tailwind
+  - TailwindCSS
+  - tailwindcss
 
-Git:
-  - git
-  - GIT
-  - Version Control
+# ── Backend / Frameworks ──────────────────────────────────────────────────────
+Node.js:
+  - NodeJS
+  - Node JS
+  - node
+  - nodejs
+  - Node
+  - node.js
+Express.js:
+  - Express
+  - ExpressJS
+  - express
+  - express.js
+Django:
+  - django
+  - Django REST Framework
+  - DRF
+FastAPI:
+  - fastapi
+  - Fast API
+Flask:
+  - flask
+Spring Boot:
+  - Spring
+  - spring boot
+  - SpringBoot
+  - spring
+  - Springboot
+  - Hibernate/JPA
+Hibernate:
+  - hibernate
+  - JPA
+Laravel:
+  - laravel
+Ruby on Rails:
+  - Rails
+  - RoR
+  - ruby on rails
+  - rails
 
-GitHub:
-  - Github
-  - github
-  - GithHub
-
+# ── Languages ─────────────────────────────────────────────────────────────────
+Python:
+  - python
+  - Python3
+  - py
+  - Python 3
+  - python3
 Java:
   - java
   - JAVA
   - Core Java
   - core java
-
-Flutter:
-  - flutter
-  - FLUTTER
-
+C++:
+  - cpp
+  - C plus plus
+  - c plus plus
+  - "c++"
+C#:
+  - csharp
+  - c sharp
+  - C Sharp
+  - dotnet c#
+Go:
+  - golang
+  - GoLang
+  - go lang
+  - Golang
+Rust:
+  - rust
+Kotlin:
+  - kotlin
+Swift:
+  - swift
+Ruby:
+  - ruby
+PHP:
+  - php
+Scala:
+  - scala
+R:
+  - r programming
+  - R language
+  - R-lang
 Dart:
   - dart
   - DART
-
-Firebase:
-  - firebase
-  - FIREBASE
-  - Firebase Cloud
-
-REST API:
-  - RESTful API
-  - REST APIs
-  - RESTful APIs
-  - REST API Integration
-  - RESTful API Integration
-  - REST
-
-FastAPI:
-  - fastapi
-  - Fast API
-
-Spring Boot:
-  - SpringBoot
-  - spring boot
-  - Springboot
-
-Hibernate:
-  - hibernate
-  - JPA
-  - Hibernate/JPA
-
 SQL:
   - sql
   - SQL Query
   - MySQL SQL
 
-Power BI:
-  - PowerBI
-  - power bi
-  - powerbi
+# ── Databases ─────────────────────────────────────────────────────────────────
+PostgreSQL:
+  - Postgres
+  - postgres
+  - PSQL
+  - psql
+  - postgresql
+MySQL:
+  - mysql
+  - My SQL
+  - MYSQL
+  - mySQL
+MongoDB:
+  - mongo
+  - mongo db
+  - Mongo
+  - mongoDB
+  - mongodb
+SQLite:
+  - sqlite
+  - Sqlite3
+  - sqlite3
+Oracle:
+  - oracle db
+  - Oracle DB
+  - oracle database
+Cassandra:
+  - cassandra
+  - Apache Cassandra
+Elasticsearch:
+  - elastic search
+  - ElasticSearch
+  - elastic
+Redis:
+  - redis
+  - REDIS
+DynamoDB:
+  - dynamo db
+  - dynamodb
+  - Dynamo
 
-Tableau:
-  - tableau
-  - TABLEAU
-
+# ── Cloud & DevOps ────────────────────────────────────────────────────────────
+AWS:
+  - Amazon Web Services
+  - amazon aws
+  - aws cloud
+  - Amazon AWS
+  - amazon web services
+GCP:
+  - Google Cloud
+  - Google Cloud Platform
+  - google cloud
+  - Google Cloud Services
+Azure:
+  - Microsoft Azure
+  - azure cloud
+  - ms azure
 Docker:
   - docker
   - DOCKER
-
+  - Docker Container
+  - containers
 Kubernetes:
   - K8s
   - k8s
   - kubernetes
+Terraform:
+  - terraform
+  - HashiCorp Terraform
+CI/CD:
+  - CICD
+  - ci cd
+  - CI-CD
+  - cicd
+  - continuous integration
+  - continuous deployment
+  - continuous integration/continuous deployment
+  - CI/CD pipelines
+  - GitHub Actions
+Git:
+  - git
+  - GIT
+  - github
+  - gitlab
+  - GitHub
+  - GitLab
+  - Version Control
+Linux:
+  - linux
+  - Ubuntu
+  - ubuntu
+  - Bash
+  - bash
+  - Unix
 
-AWS:
-  - Amazon Web Services
-  - amazon web services
-
-LangChain:
-  - Langchain
-  - langchain
-
+# ── ML / AI ───────────────────────────────────────────────────────────────────
 TensorFlow:
-  - Tensorflow
   - tensorflow
+  - Tensorflow
+  - Tensorflow 2
   - TF
-
+  - tf
 PyTorch:
-  - Pytorch
   - pytorch
-
-Scikit-learn:
+  - Pytorch
+  - torch
+scikit-learn:
   - sklearn
   - scikit learn
+  - Scikit-Learn
+  - scikit_learn
   - Sklearn
-
 Pandas:
   - pandas
   - PANDAS
-
+  - pd
 NumPy:
   - numpy
   - Numpy
-
-CI/CD:
-  - CI/CD pipelines
-  - CI-CD
-  - cicd
-  - GitHub Actions
-
-Postman:
-  - postman
-  - POSTMAN
-
-VS Code:
-  - VSCode
-  - vscode
-  - Visual Studio Code
-
+  - np
+LangChain:
+  - langchain
+  - Langchain
+  - lang chain
+  - LangChain.js
 NLP:
   - Natural Language Processing
+  - nlp
   - natural language processing
+FAISS:
+  - faiss
+  - faiss-cpu
+  - faiss-gpu
+Hugging Face:
+  - HuggingFace
+  - huggingface
+  - transformers
+  - HuggingFace Transformers
 
-OpenAI API:
-  - OpenAI
-  - openai
+# ── Mobile ────────────────────────────────────────────────────────────────────
+Flutter:
+  - flutter
+  - FLUTTER
+React Native:
+  - react native
+  - ReactNative
+  - react-native
+Android:
+  - android
+  - Android SDK
+iOS:
+  - ios
+  - Swift iOS
 
+# ── Protocols & Patterns ─────────────────────────────────────────────────────
+REST API:
+  - REST
+  - RESTful
+  - RESTful API
+  - rest api
+  - REST APIs
+  - Restful API
+  - RESTful APIs
+  - REST API Integration
+  - RESTful API Integration
+GraphQL:
+  - graphql
+  - GraphQL API
+Microservices:
+  - microservice
+  - micro services
+  - micro-services
+  - microservice architecture
+gRPC:
+  - grpc
+  - GRPC
+
+# ── Tools ─────────────────────────────────────────────────────────────────────
+Firebase:
+  - firebase
+  - FIREBASE
+  - Firebase Cloud
+  - Google Firebase
+Kafka:
+  - kafka
+  - Apache Kafka
+RabbitMQ:
+  - rabbitmq
+  - rabbit mq
+Celery:
+  - celery
+Nginx:
+  - nginx
+  - NGINX
+Riverpod:
+  - riverpod
+Power BI:
+  - PowerBI
+  - power bi
+  - powerbi
+Tableau:
+  - tableau
+  - TABLEAU
 Excel:
   - MS Excel
   - Microsoft Excel
   - excel
-
+  - ms excel
+  - excel spreadsheet
+Postman:
+  - postman
+  - POSTMAN
 Figma:
   - figma
   - FIGMA
+VS Code:
+  - VSCode
+  - vscode
+  - Visual Studio Code
+OpenAI API:
+  - OpenAI
+  - openai

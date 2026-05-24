@@ -1,15 +1,16 @@
-"""The ONE place that talks to OpenAI.
+"""The ONE place that talks to the LLM backend (Ollama, local inference).
 
 Every module (parser, copilot, explain) calls `llm_call()`. Nobody
 imports the openai SDK directly. This wrapper handles:
 
 - Redis caching keyed on (model, temperature, json_mode, prompt)
-- Exponential backoff retry (3 attempts)
+- Exponential backoff retry (3 attempts, for Ollama cold-start delays)
 - JSON-mode handling
 - Per-call token + cost logging via app.core.cost
-- Custom cache keys for cases like explanations that key on
-  (candidate_id, job_id, model_version) rather than prompt hash
-- Gemini fallback hook (stub - implement in W4)
+
+LLM backend: Ollama running locally at http://localhost:11434/v1
+Default model: gemma3:4b (no API key required)
+To change model: set OLLAMA_MODEL or PARSER_MODEL/COPILOT_MODEL/EXPLAIN_MODEL in .env
 """
 from __future__ import annotations
 
@@ -19,7 +20,7 @@ import logging
 from typing import Optional
 
 from openai import OpenAI
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 from app.core.cache import cache_get, cache_set
 from app.core.config import get_settings
@@ -27,7 +28,12 @@ from app.core.cost import log_call, project_total
 
 log = logging.getLogger(__name__)
 _settings = get_settings()
-_client = OpenAI(api_key=_settings.openai_api_key)
+
+# Ollama's OpenAI-compatible endpoint — no real API key needed
+_client = OpenAI(
+    api_key="ollama",
+    base_url=_settings.ollama_base_url,
+)
 
 
 def _build_cache_key(model: str, temperature: float, json_mode: bool, prompt: str) -> str:
@@ -41,17 +47,17 @@ class LLMError(Exception):
 
 
 class BudgetExceeded(Exception):
-    """Raised before any OpenAI call when project_total() has reached
-    settings.project_spend_cap_usd. Cache hits are exempt."""
+    """Raised before any LLM call when project_total() has reached
+    settings.project_spend_cap_usd. Cache hits are exempt.
+    (Local models cost $0 so this guard effectively never triggers.)"""
 
 
 @retry(
     stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=1, max=8),
-    retry=retry_if_exception_type(Exception),
+    wait=wait_exponential(multiplier=1, min=2, max=10),
     reraise=True,
 )
-def _call_openai(model: str, prompt: str, temperature: float, json_mode: bool) -> tuple[str, int, int]:
+def _call_ollama(model: str, prompt: str, temperature: float, json_mode: bool) -> tuple[str, int, int]:
     kwargs = {
         "model": model,
         "messages": [{"role": "user", "content": prompt}],
@@ -80,7 +86,7 @@ def llm_call(
 
     Args:
         prompt: the full prompt string (already formatted).
-        model: override default; falls back to PARSER_MODEL.
+        model: override default; falls back to PARSER_MODEL env var.
         json_mode: enforce JSON response_format.
         temperature: sampling temperature.
         cache: enable Redis caching.
@@ -101,19 +107,19 @@ def llm_call(
             log_call(model=model, module=module, cache_hit=True)
             return hit
 
-    # Budget guard: cache hits are exempt (checked above); only block
-    # before we actually call OpenAI.
+    # Budget guard: local models cost $0 so this never triggers in practice,
+    # but the guard is kept for structural consistency.
     cap = _settings.project_spend_cap_usd
     spent = project_total()
     if spent >= cap:
         raise BudgetExceeded(
-            f"project_total ${spent:.4f} >= cap ${cap:.2f}; refusing OpenAI call"
+            f"project_total ${spent:.4f} >= cap ${cap:.2f}; refusing LLM call"
         )
 
     try:
-        text, p_tokens, c_tokens = _call_openai(model, prompt, temperature, json_mode)
+        text, p_tokens, c_tokens = _call_ollama(model, prompt, temperature, json_mode)
     except Exception as e:
-        log.exception("OpenAI call failed after retries: %s", e)
+        log.exception("Ollama call failed after retries: %s", e)
         raise LLMError(str(e)) from e
 
     log_call(model=model, module=module, prompt_tokens=p_tokens, completion_tokens=c_tokens)

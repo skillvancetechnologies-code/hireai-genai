@@ -2,6 +2,7 @@ fastapi==0.115.0
 uvicorn[standard]==0.32.0
 pydantic==2.9.2
 pydantic-settings==2.6.0
+pydantic[email]>=2.9.2
 openai>=1.51.0
 redis==5.1.1
 PyYAML==6.0.2
@@ -11,3 +12,8 @@ tenacity==9.0.0
 tiktoken==0.8.0
 pytest==8.3.3
 pytest-asyncio==0.24.0
+# G1 — resume parsing
+PyMuPDF>=1.24.0
+python-docx>=1.1.0
+python-multipart>=0.0.9
+# No cloud LLM dependencies — using Ollama (local) via OpenAI-compatible API

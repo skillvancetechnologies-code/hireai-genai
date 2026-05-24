@@ -23,7 +23,7 @@ _memory_store: dict[str, tuple[str, float]] = {}  # key -> (value, expires_at)
 
 
 def _get_client() -> Optional[redis.Redis]:
-    """Lazy connect. None if Redis unavailable."""
+    """Lazy connect. Returns None if Redis unavailable, retries every call until connected."""
     global _client
     if _client is not None:
         return _client

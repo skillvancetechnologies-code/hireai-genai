@@ -1,39 +1,41 @@
-import yaml
+"""Skill name canonicalization using skill_map.yaml."""
+from __future__ import annotations
+
+from functools import lru_cache
 from pathlib import Path
 
-# Load the skill map once when the module is imported
-SKILL_MAP_PATH = Path(__file__).parent / "skill_map.yaml"
+import yaml
 
-def load_skill_map() -> dict:
-    """Load canonical skill mappings from YAML file."""
-    with open(SKILL_MAP_PATH, "r") as f:
-        return yaml.safe_load(f)
+_SKILL_MAP_PATH = Path(__file__).parent / "skill_map.yaml"
 
-# Build a reverse lookup: variation -> canonical
-# e.g. "React.js" -> "React", "ReactJS" -> "React"
-def build_reverse_map(skill_map: dict) -> dict:
-    reverse = {}
-    for canonical, variations in skill_map.items():
-        if variations:
-            for variation in variations:
-                reverse[variation.lower()] = canonical
-    return reverse
 
-SKILL_MAP = load_skill_map()
-REVERSE_MAP = build_reverse_map(SKILL_MAP)
+@lru_cache(maxsize=1)
+def _load_alias_map() -> dict[str, str]:
+    """Return {lowercase_alias: canonical_name}. Cached after first load."""
+    with _SKILL_MAP_PATH.open(encoding="utf-8") as f:
+        raw: dict = yaml.safe_load(f) or {}
+    alias_map: dict[str, str] = {}
+    for canonical, aliases in raw.items():
+        alias_map[canonical.lower()] = canonical
+        for alias in (aliases or []):
+            alias_map[str(alias).lower()] = canonical
+    return alias_map
 
-def normalize_skill(skill: str) -> str:
-    """Normalize a single skill name to its canonical form."""
-    return REVERSE_MAP.get(skill.lower(), skill)
 
-def normalize_skills(skills: list) -> list:
-    """Normalize a list of skills, removing duplicates."""
-    normalized = [normalize_skill(skill) for skill in skills]
-    # Remove duplicates while preserving order
-    seen = set()
-    result = []
-    for skill in normalized:
-        if skill.lower() not in seen:
-            seen.add(skill.lower())
-            result.append(skill)
+def normalize_skills(skills: list[str]) -> list[str]:
+    """Canonicalize skill names and deduplicate (order-preserving)."""
+    alias_map = _load_alias_map()
+    seen: set[str] = set()
+    result: list[str] = []
+    for skill in skills:
+        canonical = alias_map.get(skill.strip().lower(), skill.strip())
+        key = canonical.lower()
+        if key not in seen:
+            seen.add(key)
+            result.append(canonical)
     return result
+
+
+def reload_skill_map() -> None:
+    """Force re-read of skill_map.yaml (for tests/dev)."""
+    _load_alias_map.cache_clear()

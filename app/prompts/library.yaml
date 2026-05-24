@@ -19,9 +19,9 @@
 # ============================================================
 
 parser_main:
-  version: 3
+  version: 4
   description: "Resume parsing - extracts structured candidate JSON from raw resume text."
-  model: gpt-4o-mini
+  model: gemma3:4b
   temperature: 0.1
   json_mode: true
   template: |
@@ -32,7 +32,7 @@ parser_main:
       "name": "string",
       "email": "string",
       "phone": "string or null",
-      "skills": ["array of technical skills only, no soft skills"],
+      "skills": ["array of strings"],
       "experience_years": <number, total years of professional experience>,
       "education": "highest degree + institution, e.g. 'B.Tech, IIT Madras'",
       "projects": ["array of project titles, max 5"],
@@ -41,11 +41,17 @@ parser_main:
     }}
 
     Rules:
-    - If experience years are not explicitly stated, infer from earliest job date.
-    - Normalize skills: 'React.js' -> 'React', 'Postgres' -> 'PostgreSQL'.
-    - DO NOT include soft skills like 'teamwork' or 'leadership'.
+    - PHONE: If no phone number appears in the resume, set "phone" to null. Do not guess or
+      invent a number. Only populate it if a phone number is explicitly present in the text.
+    - SKILLS: Copy skill names exactly as written in the resume. Do NOT paraphrase, generalise,
+      or rename. If the resume says "Node.js", output "Node.js" — not "Node" or "NodeJS".
+      If the resume says "REST API", output "REST API" — not "REST" or "APIs".
+      Include every distinct technical skill, tool, framework, and language listed.
+      Do NOT include soft skills like "teamwork", "leadership", or "communication".
+    - EXPERIENCE: If experience years are not explicitly stated, infer from earliest job date.
+      For students or fresh graduates with no work experience, set experience_years to 0.
     - If email is missing or malformed, set parse_confidence < 0.5.
-    - Output JSON only. No markdown, no explanation.
+    - Output JSON only. No markdown, no explanation, no trailing text.
 
     Resume:
     ```
@@ -55,11 +61,12 @@ parser_main:
     - "v1: initial - covers extraction schema, skill normalization rules, JSON-only output"
     - "v2: G1 prompt iteration - tightened normalization examples"
     - "v3: restored json_mode flag dropped in v2"
+    - "v4: phone must be null when absent (not guessed); skills must be verbatim from resume text, not paraphrased"
 
 intent_classifier:
   version: 1
   description: "Copilot - converts free-text recruiter query into a structured filter spec."
-  model: gpt-4o-mini
+  model: gemma3:4b
   temperature: 0.1
   json_mode: true
   template: |
@@ -92,7 +99,7 @@ intent_classifier:
 explanation:
   version: 1
   description: "XAI - generates 3-4 sentence neutral, factual explanation of a candidate score."
-  model: gpt-4o
+  model: gemma3:4b
   temperature: 0.2
   json_mode: false
   template: |

@@ -6,14 +6,13 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    # LLM
-    openai_api_key: str = "sk-missing"
-    gemini_api_key: str = ""
+    # LLM — Ollama (local, no API key required)
+    ollama_base_url: str = "http://localhost:11434/v1"
 
-    # Model selection
-    parser_model: str = "gpt-4o-mini"
-    copilot_model: str = "gpt-4o-mini"
-    explain_model: str = "gpt-4o"
+    # Model selection (Ollama model tags)
+    parser_model: str = "gemma3:4b"
+    copilot_model: str = "gemma3:4b"
+    explain_model: str = "gemma3:4b"
 
     # Infra
     redis_url: str = "redis://localhost:6379/0"

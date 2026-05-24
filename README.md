@@ -1,186 +1,297 @@
-# hireai-genai
+# HireAI GenAI
 
-GenAI services for HireAI Copilot: resume parsing, AI Copilot query engine, and Explainable AI score rationales. Three FastAPI modules sharing one infrastructure layer.
+AI-powered resume parsing, recruiter copilot, and explainable scoring — all running locally via Ollama (no API keys required).
 
 ```
 hireai-genai/
 ├── app/
 │   ├── main.py                 # FastAPI app, mounts all 3 routers
-│   ├── core/                   # G4 owns - shared infra
+│   ├── core/                   # G4 owns — shared infra
 │   │   ├── config.py           #   env vars + settings
-│   │   ├── llm.py              #   the ONE LLM wrapper
+│   │   ├── llm.py              #   the ONE LLM wrapper (Ollama)
 │   │   ├── cache.py            #   Redis (with in-memory fallback)
-│   │   ├── cost.py             #   per-call $ tracking
+│   │   ├── cost.py             #   per-call token/cost tracking
 │   │   ├── prompts.py          #   prompt library loader
 │   │   └── eval.py             #   eval runner framework
 │   ├── modules/
-│   │   ├── parser/             # G1
-│   │   ├── copilot/            # G2
-│   │   └── explain/            # G3
-│   ├── prompts/
-│   │   ├── library.yaml        # versioned prompts (3 starters)
-│   │   └── README.md           # how G1/G2/G3 use the library
-│   └── tests/                  # smoke tests for the W1 infra
+│   │   ├── parser/             # G1 — resume → JSON
+│   │   ├── copilot/            # G2 — recruiter query engine
+│   │   └── explain/            # G3 — score explanation
+│   └── prompts/
+│       └── library.yaml        # all prompts live here (versioned)
 ├── data/
 │   ├── eval_sets/              # gold cases per module
 │   └── eval_results/           # nightly run outputs
 ├── scripts/
 │   ├── run_evals.py            # nightly eval runner
-│   ├── cost_summary.py         # daily Slack-ready spend summary
-│   └── precache_explanations.py # W5+ pre-warm script
+│   ├── nightly.py              # evals + cost summary + Slack alerts
+│   └── cost_summary.py         # daily spend report
 ├── .env.example
 ├── requirements.txt
 └── README.md
 ```
 
-## Setup
+---
+
+## Setup & Run Instructions
+
+### 1 — Install Ollama (one-time per machine)
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+# Windows: download the installer from https://ollama.com/download
+# Mac:
+brew install ollama
 
+# Linux:
+curl -fsSL https://ollama.com/install.sh | sh
+```
+
+### 2 — Pull the default model
+
+```bash
+# Downloads gemma3:4b (~2.5 GB). Only needed once.
+ollama pull gemma3:4b
+
+# Verify Ollama is running (it starts as a background service after install)
+curl http://localhost:11434/api/tags
+```
+
+### 3 — Configure environment
+
+```bash
+# Copy the example file — no API keys needed
 cp .env.example .env
-# edit .env: set OPENAI_API_KEY, point REDIS_URL at hireai-web's docker-compose Redis
 
-uvicorn app.main:app --reload --port 8001
+# Open .env and optionally:
+#   - Change PARSER_MODEL to gemma3:12b or gemma3:27b for higher accuracy (needs more RAM)
+#   - Set REDIS_URL if Redis is on a non-default host
+#   - Set SLACK_WEBHOOK_URL for nightly cost/regression alerts
 ```
 
-Verify:
+### 4 — Install Python dependencies
 
 ```bash
-curl http://localhost:8001/healthz                 # {"status":"ok"}
-curl http://localhost:8001/readyz                  # reports Redis status
-curl -X POST http://localhost:8001/parse           # G1 stub response
-curl -X POST http://localhost:8001/copilot \
-  -H "Content-Type: application/json" \
-  -d '{"query":"top 5 python devs"}'               # G2 stub response
-curl -X POST http://localhost:8001/explain \
-  -H "Content-Type: application/json" \
-  -d '{"candidate_id":"CAND0001","job_id":"JOB0001"}'  # G3 stub response
+# Python 3.11+ recommended
+pip install -r requirements.txt
 ```
 
-## Week 1 Demo Checklist (G4)
+### 5 — (Optional) Start Redis for persistent caching
 
-These are what you show on Friday. Every item is independently demonstrable.
-
-### 1. The LLM wrapper works end-to-end
-
-```python
-from app.core.llm import llm_call
-print(llm_call("Say hello in one word.", model="gpt-4o-mini", module="demo"))
-print(llm_call("Say hello in one word.", model="gpt-4o-mini", module="demo"))  # cache hit
+```bash
+# Without Redis the service falls back to in-memory cache automatically.
+# No data is lost — just no cache persistence across restarts.
+docker compose up -d redis
 ```
 
-Second call is instant. Check `data/cost_log.jsonl` — second record has `"cache_hit": true` and `"cost_usd": 0.0`.
+### 6 — Start the FastAPI server
 
-### 2. Smoke tests pass
+```bash
+# Starts on port 8001. --reload restarts on every file save (dev mode).
+uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
+```
+
+### 7 — Verify the service is up
+
+```bash
+# Should return {"status": "ok"}
+curl http://localhost:8001/healthz
+
+# Should return Redis status — "ok" if connected, "degraded" if using memory fallback
+curl http://localhost:8001/readyz
+
+# Open the interactive API docs in a browser
+# http://localhost:8001/docs
+```
+
+### 8 — Run the test suite
 
 ```bash
 pytest app/tests/ -v
 ```
 
-15 tests cover: prompt loading, cache roundtrip, retry/cache logic on `llm_call`, JSON parsing, custom cache keys (the explain-module case), cost estimation, and cost logging.
-
-### 3. Prompt library has 3 versioned prompts
+### 9 — Run the parser eval (optional)
 
 ```bash
-python -c "from app.core.prompts import list_prompts; print(list_prompts())"
-# ['parser_main', 'intent_classifier', 'explanation']
-```
-
-Open `app/prompts/library.yaml` — show the schema (`version`, `model`, `temperature`, `template`, `changelog`) and the three committed prompts.
-
-### 4. Cost summary works
-
-```bash
-python scripts/cost_summary.py --slack
-```
-
-Prints the Slack-ready daily summary. Empty on Day 1, populates as G1/G2/G3 start calling `llm_call`.
-
-### 5. Eval runner skeleton works
-
-```bash
+# Place benchmark PDFs in data/eval_sets/parser_resumes/ first (filenames must
+# match the "input" field in data/eval_sets/parser.json)
 python scripts/run_evals.py --all
 ```
 
-Loads the three eval sets, reports each module (W1: no runner registered yet — that's expected; W2 wires real runners).
-
-### 6. Onboarding doc exists
-
-`app/prompts/README.md` — the quickstart G1/G2/G3 read on day 1.
-
-## Week 2 (G4 infra additions)
-
-### Eval runner — parser
-
-- Canonical eval set format: `data/eval_sets/<module>.json` = list of `{id, input, expected}`.
-- Parser eval drives G1's module the same way production does — pass a resume FILE, let G1 extract text. The runner does NOT reimplement PDF parsing.
-- PDFs live in `data/eval_sets/parser_resumes/` (gitignored — real PII). G1 drops the 10 files there; filenames must match the `input` field in `parser.json`.
-- If G1's parser is not yet importable, or the PDF folder is empty, `run_eval("parser")` records `accuracy=null` with a clean skip message and does not crash.
-- `field_accuracy` grades ONLY the keys present in each case's `expected` object — extra fields G1 returns (`projects`, `summary`, `parse_confidence`) are neither rewarded nor penalized.
-
-### Nightly automation
+### 10 — Nightly automation
 
 ```bash
-python scripts/nightly.py            # runs evals + posts cost summary + regression alerts
+# Runs evals + posts cost summary + regression alerts to Slack
+python scripts/nightly.py
+
+# Cron line (add to server crontab):
+# 0 6 * * * cd /path/to/hireai-genai && .venv/bin/python scripts/nightly.py
 ```
 
-Cron line (add to your server's crontab):
+### Switching models
 
-```
-0 6 * * * cd /path/to/hireai-genai && .venv/bin/python scripts/nightly.py
-```
+Edit `.env` and restart the server — no code changes needed.
 
-Without `SLACK_WEBHOOK_URL` set, messages are logged instead of posted (offline-safe).
-
-### Slack setup
-
-Set `SLACK_WEBHOOK_URL` in `.env` to an incoming-webhook URL for `#genai-team`. The nightly job posts:
-
-1. Eval summary (per-module accuracy)
-2. Cost summary (yesterday's spend + project total vs cap)
-3. One regression alert per module that dropped >3pts vs its 7-day average, tagging the owner from `module_owners` in `config.py`.
-
-### Redis check
-
-```bash
-python scripts/check_infra.py        # exit 0 if Redis up, 1 if down
-```
-
-`REDIS_URL` must point at the same Redis instance hireai-web's docker-compose runs (so cache hits are shared). When connected, `GET /readyz` returns `{"status":"ok"}`. A response of `{"status":"degraded"}` means the wrapper is on memory fallback — fix Redis before treating cost numbers as authoritative.
-
-### Cost integrity
-
-- `module=` is now a REQUIRED keyword arg on `llm_call` / `llm_call_json` — every call must be attributable.
-- `BudgetExceeded` is raised before any OpenAI call once `project_total() >= PROJECT_SPEND_CAP_USD`. Cache hits are exempt.
-
-## Architecture Rules (enforced)
-
-1. **`from openai import OpenAI` only lives in `app/core/llm.py`.** Nobody else imports the SDK directly.
-2. **All prompts live in `library.yaml`.** No inline prompt strings in module code.
-3. **All LLM calls pass a `module=` tag.** This is how cost is attributed.
-4. **Cache TTL is always explicit or comes from settings.** Never hardcoded constants.
-5. **Prompt changes require version bump + changelog entry.** Enforced via PR review by G4.
-
-## Cost Targets
-
-Total project budget: **<$200 over 6 weeks**.
-
-| Module | Model | Strategy |
+| Model | RAM needed | Notes |
 |---|---|---|
-| Parser | gpt-4o-mini | Cache by file hash. Most resumes parsed once. |
-| Copilot | gpt-4o-mini | Cache by normalized query. |
-| Explain | gpt-4o | Pre-cache top 1000 pairs in W5. |
+| `gemma3:4b` | ~4 GB | Default — fast, good JSON following |
+| `gemma3:12b` | ~8 GB | Better accuracy for parsing |
+| `gemma3:27b` | ~20 GB | Highest accuracy |
+| `llama3.2:3b` | ~3 GB | Fastest option |
+| `llama3.1:8b` | ~6 GB | Strong instruction following |
 
-Daily summary posted to `#genai-team` Slack via `scripts/cost_summary.py --slack`.
+---
+
+## API Reference — Week 2
+
+Base URL: `http://localhost:8001`
+
+---
+
+### Health & Infra
+
+#### `GET /healthz`
+Liveness probe. Returns `{"status": "ok"}` if the process is up.
+
+#### `GET /readyz`
+Readiness probe. Reports whether Redis is reachable.
+
+| `status` | Meaning |
+|---|---|
+| `"ok"` | Redis connected — cache is persistent |
+| `"degraded"` | Redis unreachable — service still works via in-memory fallback |
+
+#### `GET /admin/cost/today`
+Token usage and estimated cost per module for the current day, read from `data/cost_log.jsonl`.
+> Local Ollama runs cost $0 — the tracker is wired for when the project migrates to cloud models.
+
+#### `GET /admin/cost/total`
+Cumulative project spend vs. the configured `PROJECT_SPEND_CAP_USD`.
+
+---
+
+### Parser — `POST /parse`
+
+**Owner:** G1 | **Status: fully implemented in Week 2**
+
+Accepts a resume file upload and returns a structured candidate JSON record.
+
+**Request:** `multipart/form-data`, field name `file` — `.pdf` or `.docx` only.
+
+**Response:**
+```json
+{
+  "name": "Jane Smith",
+  "email": "jane@example.com",
+  "phone": "+1-555-0100",
+  "skills": ["Python", "FastAPI", "PostgreSQL"],
+  "experience_years": 4.5,
+  "education": "B.Sc. Computer Science, MIT, 2019",
+  "projects": ["Resume parser using LLMs", "E-commerce backend"],
+  "summary": "Backend engineer with 4+ years of Python experience...",
+  "parse_confidence": 0.91,
+  "raw_text": "..."
+}
+```
+
+**What it does:**
+1. Extracts raw text from the uploaded file — PyMuPDF for PDFs, python-docx for DOCX.
+2. Sends the text to Ollama (`PARSER_MODEL`) using the `parser_main` prompt from `app/prompts/library.yaml`.
+3. Retries up to 3 times on malformed JSON — feeds the parse error back to the model each attempt.
+4. Normalises skill names through `parser/skill_map.yaml` — e.g. `"JS"` → `"JavaScript"`.
+5. Validates the result against the `ParsedCandidate` Pydantic schema before returning.
+
+**Error responses:**
+| Code | Reason |
+|---|---|
+| `415` | Unsupported file type (not `.pdf` or `.docx`) |
+| `422` | Empty file, or LLM output failed schema validation after all retries |
+| `500` | Parsing failed for an unexpected reason |
+
+**Quick test:**
+```bash
+curl -X POST http://localhost:8001/parse \
+  -F "file=@/path/to/resume.pdf"
+```
+
+---
+
+### Copilot — `POST /copilot`
+
+**Owner:** G2 | **Status: Week 1 stub — real implementation coming in Week 3**
+
+Recruiter natural-language query interface (e.g. "find Python engineers with 3+ years in fintech").
+
+**Request:**
+```json
+{
+  "query": "Find senior ML engineers with PyTorch experience",
+  "history": [],
+  "job_context": "Optional job description text for context"
+}
+```
+
+**Response (current stub):**
+```json
+{
+  "candidates": [],
+  "summary": "Stub response for query: '...'. G2 replaces this in W3.",
+  "query_interpreted": {
+    "type": "filter",
+    "skills_required": [],
+    "top_k": 10
+  }
+}
+```
+
+> G2 wires real candidate retrieval and LLM-generated summaries in Week 3.
+
+---
+
+### Explain — `POST /explain`
+
+**Owner:** G3 | **Status: Week 1 stub — real implementation coming in Week 3**
+
+Returns an LLM-generated explanation of why a candidate scored the way they did for a given job.
+
+**Request:**
+```json
+{
+  "candidate_id": "abc123",
+  "job_id": "job456"
+}
+```
+
+**Response (current stub):**
+```json
+{
+  "candidate_id": "abc123",
+  "job_id": "job456",
+  "explanation_text": "Stub explanation from W1 — G3 replaces this in W3.",
+  "top_strengths": [],
+  "top_gaps": [],
+  "shap_values": [],
+  "model_version": "stub-v0",
+  "generated_at": "2026-05-25T10:00:00+00:00"
+}
+```
+
+> G3 wires a real LLM-generated 3–4 sentence rationale plus SHAP-style feature attribution in Week 3.
+
+---
+
+## Architecture Rules
+
+1. **One LLM entry point** — all inference goes through `app/core/llm.py` → Ollama at `http://localhost:11434/v1` via the OpenAI-compatible API.
+2. **All prompts in `app/prompts/library.yaml`** — no inline prompt strings in module code. Prompt changes need a version bump + changelog entry.
+3. **Every `llm_call()` must pass `module=`** — required for cost attribution.
+4. **Redis cache wraps every LLM call** — TTL 1 hour (configurable). Falls back to in-memory dict when Redis is down.
+5. **No cloud credentials** — `.env` has no `OPENAI_API_KEY` or `GEMINI_API_KEY`. Never add them.
 
 ## Module Owners
 
 | Module | Owner | Endpoint |
 |---|---|---|
-| Parser | G1 | `POST /parse` |
-| Copilot | G2 | `POST /copilot` |
-| Explain | G3 | `POST /explain` |
-| Infra (this) | G4 | `core/*`, `prompts/*`, `scripts/*` |
+| Parser (resume → JSON) | G1 | `POST /parse` |
+| Copilot (recruiter queries) | G2 | `POST /copilot` |
+| XAI (score explanations) | G3 | `POST /explain` |
+| Infra (llm, cache, eval, cost) | G4 | `app/core/`, `scripts/` |

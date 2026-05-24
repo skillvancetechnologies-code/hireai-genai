@@ -1,5 +1,7 @@
-from pydantic import BaseModel, EmailStr, Field
 from typing import List, Optional
+
+from pydantic import BaseModel, EmailStr, Field
+
 
 class ParsedCandidate(BaseModel):
     name: str = Field(..., max_length=255)
@@ -12,4 +14,3 @@ class ParsedCandidate(BaseModel):
     raw_text: str
     summary: str
     parse_confidence: float = Field(..., ge=0, le=1)
-    
