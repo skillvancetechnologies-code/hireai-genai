@@ -1,0 +1,122 @@
+[
+  {
+    "id": "case_01",
+    "input": "Resume_zoya.pdf",
+    "expected": {
+      "name": "SHAIK NOOR ZOYA MARIAM",
+      "email": "zmaryam7670@gmail.com",
+      "phone": "+919493377404",
+      "skills": ["C", "Java", "Python", "MySQL", "Oracle", "PostgreSQL", "NLP"],
+      "experience_years": 0,
+      "education": "B.Tech Computer Science Engineering, The Apollo University"
+    }
+  },
+  {
+    "id": "case_02",
+    "input": "MANASA_RESUME.pdf",
+    "expected": {
+      "name": "MANASA R",
+      "email": "jmanasa2k5@gmail.com",
+      "phone": "+91-9392832376",
+      "skills": ["Java", "Python", "HTML", "CSS", "React", "Node.js", "MongoDB", "MySQL"],
+      "experience_years": 0,
+      "education": "B.Tech CSE, The Apollo University, Chittoor"
+    }
+  },
+  {
+    "id": "case_03",
+    "input": "Prasanthi_CV.pdf",
+    "expected": {
+      "name": "B D N PRASANTHI",
+      "email": "prasanthibadarvada@gmail.com",
+      "phone": "+91-9014662359",
+      "skills": ["SQL", "Power BI", "Excel", "Tableau"],
+      "experience_years": 3,
+      "education": "MBA Health care and Hospital Management, School of Management Studies, UOH"
+    }
+  },
+  {
+    "id": "case_04",
+    "input": "Mujahid_Amin_CV.pdf",
+    "expected": {
+      "name": "MUJAHID AMIN",
+      "email": "mujahidameen205@gmail.com",
+      "phone": null,
+      "skills": ["Flutter", "Dart", "Firebase", "Riverpod", "REST API", "Git"],
+      "experience_years": 0,
+      "education": "Bachelor of Science in Software Engineering, Bayero University, Kano"
+    }
+  },
+  {
+    "id": "case_05",
+    "input": "Mohammed_Khalil.pdf",
+    "expected": {
+      "name": "Mohammed Khalil",
+      "email": "klilmohammed9@gmail.com",
+      "phone": "+201010518801",
+      "skills": ["Flutter", "Dart", "Git", "Firebase", "CI/CD", "Scrum"],
+      "experience_years": 2,
+      "education": "Higher Technological Institute (HTI), B.Tech, Tenth of Ramadan City"
+    }
+  },
+  {
+    "id": "case_06",
+    "input": "Menna_Allah.pdf",
+    "expected": {
+      "name": "Menna Allah Saed Abd El-hafeze",
+      "email": "mena.seaad23@gmail.com",
+      "phone": "+201146323243",
+      "skills": ["Flutter", "Dart", "Firebase", "Python", "Java", "Git"],
+      "experience_years": 3,
+      "education": "Bachelor of Science in Computer Science, Faculty of Science, Alexandria University"
+    }
+  },
+  {
+    "id": "case_07",
+    "input": "Sowmya_Rajarajan.pdf",
+    "expected": {
+      "name": "Sowmya Rajarajan",
+      "email": "sowmyarajarajan.tech@gmail.com",
+      "phone": "+91 9363195180",
+      "skills": ["Java", "Spring Boot", "Hibernate", "MySQL", "PostgreSQL", "Git"],
+      "experience_years": 0,
+      "education": "B.Tech in Information Technology, Rajalakshmi Engineering College (REC)"
+    }
+  },
+  {
+    "id": "case_08",
+    "input": "JAYASHREE_RESUME.pdf",
+    "expected": {
+      "name": "THUPAKULA JAYASHREE",
+      "email": "jayashreeshetty250206@gmail.com",
+      "phone": "+91 9347005771",
+      "skills": ["Python", "Java", "React", "PostgreSQL", "MySQL", "MongoDB", "Git"],
+      "experience_years": 2,
+      "education": "B.Tech in Computer Science Engineering, The Apollo University"
+    }
+  },
+  {
+    "id": "case_09",
+    "input": "Mughal_Arshad_Resume.pdf",
+    "expected": {
+      "name": "MUGHAL ARSHAD",
+      "email": "arshadmsb@gmail.com",
+      "phone": "+91 78421 15953",
+      "skills": ["Python", "FastAPI", "React", "PostgreSQL", "LangChain", "NLP", "Git"],
+      "experience_years": 2,
+      "education": "B.Tech, The Apollo University, Chittoor"
+    }
+  },
+  {
+    "id": "case_10",
+    "input": "Niyati_Sachdeva.pdf",
+    "expected": {
+      "name": "Niyati Sachdeva",
+      "email": "sachdeva.niyati17@gmail.com",
+      "phone": "7351873452",
+      "skills": ["Flutter", "Dart", "REST API", "Riverpod"],
+      "experience_years": 0,
+      "education": "B.Tech, Ajay Kumar Garg Engineering College"
+    }
+  }
+]
