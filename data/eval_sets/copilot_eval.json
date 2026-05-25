@@ -1,0 +1,89 @@
+[
+  {
+    "query": "Show Python developers",
+    "expected": {
+      "type": "filter",
+      "skills_required": ["Python"],
+      "top_k": 10
+    }
+  },
+  {
+    "query": "React developers with 2 years experience",
+    "expected": {
+      "type": "filter",
+      "skills_required": ["React"],
+      "min_experience": 2,
+      "top_k": 10
+    }
+  },
+  {
+    "query": "Top 5 candidates for JOB1",
+    "expected": {
+      "type": "filter",
+      "job_id": 1,
+      "top_k": 5
+    }
+  },
+  {
+    "query": "Show Good Fit candidates",
+    "expected": {
+      "type": "filter",
+      "label_filter": "Good Fit",
+      "top_k": 10
+    }
+  },
+  {
+    "query": "Top 3 backend developers",
+    "expected": {
+      "type": "filter",
+      "top_k": 3,
+      "free_text": "backend"
+    }
+  },
+  {
+    "query": "Show shortlisted Python developers with 2 years experience",
+    "expected": {
+      "type": "filter",
+      "skills_required": ["Python"],
+      "min_experience": 2,
+      "status_filter": "Shortlisted",
+      "top_k": 10
+    }
+  },
+  {
+    "query": "Top 4 rejected Docker developers",
+    "expected": {
+      "type": "filter",
+      "skills_required": ["Docker"],
+      "status_filter": "Rejected",
+      "top_k": 4
+    }
+  },
+  {
+    "query": "Show hired candidates for JOB2",
+    "expected": {
+      "type": "filter",
+      "job_id": 2,
+      "status_filter": "Hired",
+      "top_k": 10
+    }
+  },
+  {
+    "query": "Top 6 Average Fit SQL candidates",
+    "expected": {
+      "type": "filter",
+      "skills_required": ["SQL"],
+      "label_filter": "Average Fit",
+      "top_k": 6
+    }
+  },
+  {
+    "query": "Show Poor Fit candidates with 5 years experience",
+    "expected": {
+      "type": "filter",
+      "min_experience": 5,
+      "label_filter": "Poor Fit",
+      "top_k": 10
+    }
+  }
+]
