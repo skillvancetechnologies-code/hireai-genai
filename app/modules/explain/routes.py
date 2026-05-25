@@ -1,30 +1,12 @@
-"""Explain routes — owned by G3. W1 stub returns a hardcoded shape."""
-from datetime import datetime, timezone
-
 from fastapi import APIRouter
-from pydantic import BaseModel
+from app.modules.explain.schemas import ExplainRequest, ExplainResponse
+from app.modules.explain.generator import generate_explanation
 
-router = APIRouter(prefix="/explain", tags=["explain"])
+router = APIRouter(prefix="/explain", tags=["Explain"])
 
-
-class ExplainRequest(BaseModel):
-    candidate_id: str
-    job_id: str
-
-
-@router.post("")
-def explain_score(req: ExplainRequest) -> dict:
-    # W1 mock contract.
-    return {
-        "candidate_id": req.candidate_id,
-        "job_id": req.job_id,
-        "explanation_text": (
-            "Stub explanation from W1. G3 replaces this in W2 with a real "
-            "LLM-generated 3-4 sentence rationale."
-        ),
-        "top_strengths": [],
-        "top_gaps": [],
-        "shap_values": [],
-        "model_version": "stub-v0",
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-    }
+@router.post("/", response_model=ExplainResponse)
+def explain_candidate(request: ExplainRequest):
+    return generate_explanation(
+        request.candidate_id,
+        request.job_id
+    )
