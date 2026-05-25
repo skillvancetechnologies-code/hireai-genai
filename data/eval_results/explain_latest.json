@@ -1,0 +1,17 @@
+{
+  "module": "explain",
+  "accuracy": null,
+  "count": 2,
+  "results": [
+    {
+      "id": "explain_001",
+      "score": null,
+      "note": "no runner registered"
+    },
+    {
+      "id": "explain_002",
+      "score": null,
+      "note": "no runner registered"
+    }
+  ]
+}
