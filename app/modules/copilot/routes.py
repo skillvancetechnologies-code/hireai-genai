@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException, status
 
-from app.models.schemas import CopilotRequest, CopilotResponse, QueryIntent
-from app.services.candidate_service import get_candidates
-from app.services.dataset_loader import DatasetValidationError
-from app.services.intent_parser import IntentParseError, parse_query
+from app.modules.copilot.schemas import CopilotRequest, CopilotResponse, QueryIntent
+from app.modules.copilot.candidate_service import get_candidates
+from app.modules.copilot.dataset_loader import DatasetValidationError
+from app.modules.copilot.intent_parser import IntentParseError, parse_query
 
 
 router = APIRouter(tags=["copilot"])

@@ -1,0 +1,27 @@
+{
+  "module": "explain",
+  "accuracy": 1.0,
+  "count": 5,
+  "results": [
+    {
+      "id": "explain_001",
+      "score": 1.0
+    },
+    {
+      "id": "explain_002",
+      "score": 1.0
+    },
+    {
+      "id": "explain_003",
+      "score": 1.0
+    },
+    {
+      "id": "explain_004",
+      "score": 1.0
+    },
+    {
+      "id": "explain_005",
+      "score": 1.0
+    }
+  ]
+}

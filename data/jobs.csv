@@ -1,0 +1,11 @@
+job_id,role,required_skills,min_experience
+1,backend engineer,python|django|rest api|postgresql|redis|docker,2
+2,frontend engineer,react|javascript|typescript|css|html|redux|webpack,1
+3,data scientist,python|machine learning|pandas|scikit-learn|sql|tensorflow,3
+4,devops engineer,aws|kubernetes|terraform|ci/cd|linux|docker|ansible,3
+5,mobile developer,flutter|dart|android|kotlin|ios|swift|firebase,2
+6,machine learning engineer,python|tensorflow|pytorch|mlflow|kubernetes|sql,4
+7,full stack developer,react|node.js|mongodb|express|postgresql|docker|git,2
+8,data engineer,spark|kafka|airflow|python|sql|aws|hadoop|dbt,3
+9,qa engineer,selenium|python|pytest|jira|postman|rest api|ci/cd,1
+10,product manager,agile|roadmapping|sql|jira|stakeholder management|analytics,4

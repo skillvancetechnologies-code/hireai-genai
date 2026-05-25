@@ -3,8 +3,8 @@ from typing import Any
 
 from pydantic import ValidationError
 
-from app.models.schemas import QueryIntent
-from app.services.llm_service import parse_intent_with_llm
+from app.modules.copilot.schemas import QueryIntent
+from app.modules.copilot.llm_service import parse_intent_with_llm
 
 
 class IntentParseError(ValueError):

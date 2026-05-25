@@ -1,6 +1,6 @@
 {
   "module": "parser",
-  "accuracy": 0.667,
+  "accuracy": 0.7,
   "count": 10,
   "results": [
     {
@@ -9,7 +9,7 @@
     },
     {
       "id": "case_02",
-      "score": 0.833
+      "score": 0.667
     },
     {
       "id": "case_03",
@@ -17,11 +17,11 @@
     },
     {
       "id": "case_04",
-      "score": 0.833
+      "score": 1.0
     },
     {
       "id": "case_05",
-      "score": 0.5
+      "score": 0.667
     },
     {
       "id": "case_06",
@@ -41,7 +41,7 @@
     },
     {
       "id": "case_10",
-      "score": 0.667
+      "score": 0.833
     }
   ]
 }

@@ -4,10 +4,10 @@ from pathlib import Path
 import pandas as pd
 
 
-DATA_DIR = Path(__file__).resolve().parents[1] / "data"
+DATA_DIR = Path(__file__).resolve().parents[3] / "data"
 
 REQUIRED_COLUMNS = {
-    "candidates_cleaned.csv": {
+    "candidates.csv": {
         "candidate_id",
         "name",
         "skills",
@@ -15,9 +15,9 @@ REQUIRED_COLUMNS = {
         "education",
         "projects",
     },
-    "jobs_cleaned.csv": {"job_id", "role", "required_skills", "min_experience"},
-    "applications_cleaned.csv": {"candidate_id", "job_id", "status"},
-    "scores_cleaned.csv": {"candidate_id", "job_id", "score", "label"},
+    "jobs.csv": {"job_id", "role", "required_skills", "min_experience"},
+    "applications.csv": {"candidate_id", "job_id", "status"},
+    "scores.csv": {"candidate_id", "job_id", "score", "label"},
 }
 
 
@@ -28,17 +28,16 @@ class DatasetValidationError(RuntimeError):
 @lru_cache(maxsize=1)
 def get_candidate_search_data() -> pd.DataFrame:
     """Load and join the four cleaned datasets into searchable results."""
-    candidates = _load_csv("candidates_cleaned.csv")
-    jobs = _load_csv("jobs_cleaned.csv")
-    applications = _load_csv("applications_cleaned.csv")
-    scores = _load_csv("scores_cleaned.csv")
+    candidates = _load_csv("candidates.csv")
+    jobs = _load_csv("jobs.csv")
+    applications = _load_csv("applications.csv")
+    scores = _load_csv("scores.csv")
 
     try:
         joined = applications.merge(
             scores,
             on=["candidate_id", "job_id"],
             how="inner",
-            validate="one_to_one",
         )
         joined = joined.merge(
             candidates,

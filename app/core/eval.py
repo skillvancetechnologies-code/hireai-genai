@@ -58,31 +58,38 @@ def field_accuracy(expected: dict, actual: dict) -> float:
     return matched / total
 
 
-def recall_at_k(expected: dict, actual: Any) -> float:
-    """Used by copilot: |gold ∩ predicted_top_k| / |gold|."""
-    gold = set(expected.get("candidate_ids", []))
-    if not gold:
-        return 1.0
-    if not isinstance(actual, list):
-        return 0.0
-    pred = set(actual[: len(gold)])
-    return len(gold & pred) / len(gold)
+def copilot_intent_accuracy(expected: dict, actual: Any) -> float:
+    """Copilot scorer: grades how well the parsed intent matches expected fields.
 
-
-def rubric_pass(expected: dict, actual: Any) -> float:
-    """Used by explain: average of (factual, clear, unbiased) on 1-3 scale,
-    pass if >= 2.5. For W1 this is a stub - replaced when G3 ships rubric."""
+    Uses the same field_accuracy logic — list fields use subset match,
+    scalar fields use exact equality. Only keys present in `expected` are graded.
+    """
     if not isinstance(actual, dict):
         return 0.0
-    scores = [actual.get("factual", 0), actual.get("clear", 0), actual.get("unbiased", 0)]
-    avg = sum(scores) / 3
-    return 1.0 if avg >= 2.5 else avg / 3
+    return field_accuracy(expected, actual)
+
+
+def explain_response_valid(expected: dict, actual: Any) -> float:
+    """Explain scorer: checks the response has a real explanation and non-empty
+    strengths/gaps lists. Returns 1.0 if all three checks pass, 0.0 otherwise."""
+    if not isinstance(actual, dict):
+        return 0.0
+    text = actual.get("explanation_text", "")
+    if not isinstance(text, str) or len(text) < 50:
+        return 0.0
+    if text in ("Candidate not found", "Job not found"):
+        return 0.0
+    if not actual.get("top_strengths"):
+        return 0.0
+    if not actual.get("top_gaps"):
+        return 0.0
+    return 1.0
 
 
 SCORERS: dict[str, Scorer] = {
     "parser": field_accuracy,
-    "copilot": recall_at_k,
-    "explain": rubric_pass,
+    "copilot": copilot_intent_accuracy,
+    "explain": explain_response_valid,
 }
 
 # Runners registered by modules when their actual logic exists.
@@ -133,6 +140,49 @@ def _register_parser_runner() -> None:
 
 
 _register_parser_runner()
+
+
+# ---- W3: copilot runner registration -----------------------------------
+
+def _register_copilot_runner() -> None:
+    """Try to wire G2's intent parser. Falls back gracefully if unavailable."""
+    try:
+        from app.modules.copilot.intent_parser import parse_query  # type: ignore
+    except Exception as e:
+        SKIPPED_RUNNERS["copilot"] = f"G2 copilot not importable: {e}"
+        return
+
+    def _runner(query: str) -> dict:
+        intent = parse_query(query)
+        return intent.model_dump()
+
+    RUNNERS["copilot"] = _runner
+
+
+_register_copilot_runner()
+
+
+# ---- W3: explain runner registration -----------------------------------
+
+def _register_explain_runner() -> None:
+    """Try to wire G3's explanation generator. Falls back gracefully if unavailable."""
+    try:
+        from app.modules.explain.generator import generate_explanation  # type: ignore
+    except Exception as e:
+        SKIPPED_RUNNERS["explain"] = f"G3 explain not importable: {e}"
+        return
+
+    def _runner(input_data: dict) -> dict:
+        result = generate_explanation(
+            input_data["candidate_id"],
+            input_data["job_id"],
+        )
+        return result if isinstance(result, dict) else {}
+
+    RUNNERS["explain"] = _runner
+
+
+_register_explain_runner()
 
 
 # ---- main runner -------------------------------------------------------

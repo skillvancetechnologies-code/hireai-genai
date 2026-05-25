@@ -33,7 +33,7 @@ def generate_explanation(candidate_id, job_id):
     prompt = build_prompt(candidate)
 
     # Call LLM
-    explanation = llm_call(prompt)
+    explanation = llm_call(prompt, module="explain")
 
     # Return API response
     return {

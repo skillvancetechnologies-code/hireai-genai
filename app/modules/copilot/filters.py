@@ -2,7 +2,7 @@ import re
 
 import pandas as pd
 
-from app.models.schemas import QueryIntent
+from app.modules.copilot.schemas import QueryIntent
 
 
 IGNORED_FREE_TEXT_WORDS = {

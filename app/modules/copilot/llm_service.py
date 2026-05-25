@@ -1,11 +1,8 @@
 import json
-import os
 from typing import Any
 
-from dotenv import load_dotenv
-
-
-load_dotenv()
+from app.core.config import get_settings
+from app.core.llm import llm_call
 
 
 INTENT_PROMPT_TEMPLATE = """
@@ -39,21 +36,16 @@ Recruiter query: {query}
 """
 
 
-def get_llm() -> Any:
-    """Create the Ollama-backed LangChain model used for intent parsing."""
-    from langchain_ollama import OllamaLLM
-
-    model_name = os.getenv("OLLAMA_MODEL", "gemma3:latest")
-    return OllamaLLM(model=model_name, temperature=0.1)
-
-
 def parse_intent_with_llm(query: str) -> dict[str, Any]:
     """Ask the local LLM to convert recruiter text into JSON filter intent."""
-    from langchain_core.prompts import PromptTemplate
-
-    prompt = PromptTemplate.from_template(INTENT_PROMPT_TEMPLATE)
-    chain = prompt | get_llm()
-    raw_response = chain.invoke({"query": query})
+    settings = get_settings()
+    prompt = INTENT_PROMPT_TEMPLATE.format(query=query)
+    raw_response = llm_call(
+        prompt,
+        module="copilot",
+        model=settings.copilot_model,
+        temperature=0.1,
+    )
     return _extract_json(raw_response)
 
 

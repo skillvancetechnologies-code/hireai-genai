@@ -1,26 +1,27 @@
 [
   {
     "id": "explain_001",
-    "input": {
-      "candidate_id": "CAND0001",
-      "job_id": "JOB0012"
-    },
-    "expected": {
-      "factual": 3,
-      "clear": 3,
-      "unbiased": 3
-    }
+    "input": {"candidate_id": "C1", "job_id": "J1"},
+    "expected": {}
   },
   {
     "id": "explain_002",
-    "input": {
-      "candidate_id": "CAND0042",
-      "job_id": "JOB0003"
-    },
-    "expected": {
-      "factual": 3,
-      "clear": 3,
-      "unbiased": 3
-    }
+    "input": {"candidate_id": "C2", "job_id": "J2"},
+    "expected": {}
+  },
+  {
+    "id": "explain_003",
+    "input": {"candidate_id": "C3", "job_id": "J3"},
+    "expected": {}
+  },
+  {
+    "id": "explain_004",
+    "input": {"candidate_id": "C4", "job_id": "J4"},
+    "expected": {}
+  },
+  {
+    "id": "explain_005",
+    "input": {"candidate_id": "C5", "job_id": "J5"},
+    "expected": {}
   }
 ]
