@@ -1,377 +1,539 @@
-# Skill canonicalization map.
-# Format — canonical_name: [list of aliases (case-insensitive)]
-# Add aliases freely; bump this file in PRs that extend the map.
+# Canonical skill name: [variations]
 
-# ── Frontend ─────────────────────────────────────────────────────────────────
 React:
   - React.js
   - ReactJS
   - React JS
   - react
-  - Reactjs
-  - react.js
-Vue.js:
-  - Vue
-  - VueJS
-  - Vue JS
-  - vue
-  - Vue3
-  - Vuejs
-  - Vue.js
-Angular:
-  - AngularJS
-  - Angular.js
-  - angular
-  - Angular2+
-  - Angular 2
-JavaScript:
-  - JS
-  - Javascript
-  - ECMAScript
-  - ES6
-  - ES2015
-  - java script
-  - es6
-TypeScript:
-  - TS
-  - Typescript
-  - typescript
-HTML:
-  - HTML5
-  - html
-  - html5
-  - HyperText Markup Language
-CSS:
-  - CSS3
-  - css
-  - css3
-  - Cascading Style Sheets
-Sass:
-  - SCSS
-  - sass
-  - scss
-Next.js:
-  - NextJS
-  - Next JS
-  - nextjs
-  - next.js
-  - Next
-Tailwind CSS:
-  - Tailwind
-  - tailwind
-  - TailwindCSS
-  - tailwindcss
 
-# ── Backend / Frameworks ──────────────────────────────────────────────────────
-Node.js:
-  - NodeJS
-  - Node JS
-  - node
-  - nodejs
-  - Node
-  - node.js
-Express.js:
-  - Express
-  - ExpressJS
-  - express
-  - express.js
-Django:
-  - django
-  - Django REST Framework
-  - DRF
-FastAPI:
-  - fastapi
-  - Fast API
-Flask:
-  - flask
-Spring Boot:
-  - Spring
-  - spring boot
-  - SpringBoot
-  - spring
-  - Springboot
-  - Hibernate/JPA
-Hibernate:
-  - hibernate
-  - JPA
-Laravel:
-  - laravel
-Ruby on Rails:
-  - Rails
-  - RoR
-  - ruby on rails
-  - rails
-
-# ── Languages ─────────────────────────────────────────────────────────────────
-Python:
-  - python
-  - Python3
-  - py
-  - Python 3
-  - python3
-Java:
-  - java
-  - JAVA
-  - Core Java
-  - core java
-C++:
-  - cpp
-  - C plus plus
-  - c plus plus
-  - "c++"
-C#:
-  - csharp
-  - c sharp
-  - C Sharp
-  - dotnet c#
-Go:
-  - golang
-  - GoLang
-  - go lang
-  - Golang
-Rust:
-  - rust
-Kotlin:
-  - kotlin
-Swift:
-  - swift
-Ruby:
-  - ruby
-PHP:
-  - php
-Scala:
-  - scala
-R:
-  - r programming
-  - R language
-  - R-lang
-Dart:
-  - dart
-  - DART
-SQL:
-  - sql
-  - SQL Query
-  - MySQL SQL
-
-# ── Databases ─────────────────────────────────────────────────────────────────
 PostgreSQL:
   - Postgres
   - postgres
   - PSQL
   - psql
-  - postgresql
+
+JavaScript:
+  - JS
+  - Javascript
+  - ECMAScript
+  - java script
+
+TypeScript:
+  - TS
+  - Typescript
+
+Python:
+  - python
+  - Python3
+  - Py
+
+Node.js:
+  - NodeJS
+  - Node JS
+  - node
+  - node.js
+
+MongoDB:
+  - Mongo
+  - mongo
+  - mongoDB
+
 MySQL:
   - mysql
   - My SQL
-  - MYSQL
   - mySQL
-MongoDB:
-  - mongo
-  - mongo db
-  - Mongo
-  - mongoDB
-  - mongodb
-SQLite:
-  - sqlite
-  - Sqlite3
-  - sqlite3
-Oracle:
-  - oracle db
-  - Oracle DB
-  - oracle database
-Cassandra:
-  - cassandra
-  - Apache Cassandra
-Elasticsearch:
-  - elastic search
-  - ElasticSearch
-  - elastic
-Redis:
-  - redis
-  - REDIS
-DynamoDB:
-  - dynamo db
-  - dynamodb
-  - Dynamo
 
-# ── Cloud & DevOps ────────────────────────────────────────────────────────────
-AWS:
-  - Amazon Web Services
-  - amazon aws
-  - aws cloud
-  - Amazon AWS
-  - amazon web services
-GCP:
-  - Google Cloud
-  - Google Cloud Platform
-  - google cloud
-  - Google Cloud Services
-Azure:
-  - Microsoft Azure
-  - azure cloud
-  - ms azure
-Docker:
-  - docker
-  - DOCKER
-  - Docker Container
-  - containers
-Kubernetes:
-  - K8s
-  - k8s
-  - kubernetes
-Terraform:
-  - terraform
-  - HashiCorp Terraform
-CI/CD:
-  - CICD
-  - ci cd
-  - CI-CD
-  - cicd
-  - continuous integration
-  - continuous deployment
-  - continuous integration/continuous deployment
-  - CI/CD pipelines
-  - GitHub Actions
+HTML:
+  - HTML5
+  - html
+  - html5
+
+CSS:
+  - CSS3
+  - css
+  - css3
+
 Git:
   - git
   - GIT
-  - github
-  - gitlab
-  - GitHub
-  - GitLab
   - Version Control
-Linux:
-  - linux
-  - Ubuntu
-  - ubuntu
-  - Bash
-  - bash
-  - Unix
 
-# ── ML / AI ───────────────────────────────────────────────────────────────────
-TensorFlow:
-  - tensorflow
-  - Tensorflow
-  - Tensorflow 2
-  - TF
-  - tf
-PyTorch:
-  - pytorch
-  - Pytorch
-  - torch
-scikit-learn:
-  - sklearn
-  - scikit learn
-  - Scikit-Learn
-  - scikit_learn
-  - Sklearn
-Pandas:
-  - pandas
-  - PANDAS
-  - pd
-NumPy:
-  - numpy
-  - Numpy
-  - np
-LangChain:
-  - langchain
-  - Langchain
-  - lang chain
-  - LangChain.js
-NLP:
-  - Natural Language Processing
-  - nlp
-  - natural language processing
-FAISS:
-  - faiss
-  - faiss-cpu
-  - faiss-gpu
-Hugging Face:
-  - HuggingFace
-  - huggingface
-  - transformers
-  - HuggingFace Transformers
+GitHub:
+  - Github
+  - github
+  - GithHub
 
-# ── Mobile ────────────────────────────────────────────────────────────────────
+Java:
+  - java
+  - JAVA
+  - Core Java
+  - core java
+
 Flutter:
   - flutter
   - FLUTTER
-React Native:
-  - react native
-  - ReactNative
-  - react-native
-Android:
-  - android
-  - Android SDK
-iOS:
-  - ios
-  - Swift iOS
 
-# ── Protocols & Patterns ─────────────────────────────────────────────────────
-REST API:
-  - REST
-  - RESTful
-  - RESTful API
-  - rest api
-  - REST APIs
-  - Restful API
-  - RESTful APIs
-  - REST API Integration
-  - RESTful API Integration
-GraphQL:
-  - graphql
-  - GraphQL API
-Microservices:
-  - microservice
-  - micro services
-  - micro-services
-  - microservice architecture
-gRPC:
-  - grpc
-  - GRPC
+Dart:
+  - dart
+  - DART
 
-# ── Tools ─────────────────────────────────────────────────────────────────────
 Firebase:
   - firebase
   - FIREBASE
   - Firebase Cloud
-  - Google Firebase
-Kafka:
-  - kafka
-  - Apache Kafka
-RabbitMQ:
-  - rabbitmq
-  - rabbit mq
-Celery:
-  - celery
-Nginx:
-  - nginx
-  - NGINX
-Riverpod:
-  - riverpod
+
+REST API:
+  - RESTful API
+  - REST APIs
+  - RESTful APIs
+  - REST API Integration
+  - RESTful API Integration
+  - REST
+
+FastAPI:
+  - fastapi
+  - Fast API
+
+Spring Boot:
+  - SpringBoot
+  - spring boot
+  - Springboot
+
+Hibernate:
+  - hibernate
+  - JPA
+  - Hibernate/JPA
+
+SQL:
+  - sql
+  - SQL Query
+  - MySQL SQL
+
 Power BI:
   - PowerBI
   - power bi
   - powerbi
+
 Tableau:
   - tableau
   - TABLEAU
-Excel:
-  - MS Excel
-  - Microsoft Excel
-  - excel
-  - ms excel
-  - excel spreadsheet
+
+Docker:
+  - docker
+  - DOCKER
+
+Kubernetes:
+  - K8s
+  - k8s
+  - kubernetes
+
+AWS:
+  - Amazon Web Services
+  - amazon web services
+
+LangChain:
+  - Langchain
+  - langchain
+
+TensorFlow:
+  - Tensorflow
+  - tensorflow
+  - TF
+
+PyTorch:
+  - Pytorch
+  - pytorch
+  - torch
+
+Scikit-learn:
+  - sklearn
+  - scikit learn
+  - Sklearn
+
+Pandas:
+  - pandas
+  - PANDAS
+
+NumPy:
+  - numpy
+  - Numpy
+
+CI/CD:
+  - CI/CD pipelines
+  - CI-CD
+  - cicd
+  - GitHub Actions
+
 Postman:
   - postman
   - POSTMAN
-Figma:
-  - figma
-  - FIGMA
+
 VS Code:
   - VSCode
   - vscode
   - Visual Studio Code
+
+NLP:
+  - Natural Language Processing
+  - natural language processing
+
 OpenAI API:
   - OpenAI
   - openai
+
+Excel:
+  - MS Excel
+  - Microsoft Excel
+  - excel
+
+Figma:
+  - figma
+  - FIGMA
+
+Django:
+  - django
+  - DJANGO
+
+Flask:
+  - flask
+  - FLASK
+
+OpenCV:
+  - opencv
+  - cv2
+  - Open CV
+
+Keras:
+  - keras
+  - KERAS
+
+Matplotlib:
+  - matplotlib
+  - pyplot
+
+Seaborn:
+  - seaborn
+  - sns
+
+Redis:
+  - redis
+  - REDIS
+
+GraphQL:
+  - graphql
+  - Graph QL
+
+Linux:
+  - linux
+  - LINUX
+  - Ubuntu
+  - ubuntu
+
+Bash:
+  - bash
+  - shell
+  - Shell Script
+  - shellscript
+
+Jenkins:
+  - jenkins
+  - JENKINS
+
+Ansible:
+  - ansible
+  - ANSIBLE
+
+Terraform:
+  - terraform
+  - TERRAFORM
+
+Azure:
+  - Microsoft Azure
+  - microsoft azure
+  - AZ
+
+GCP:
+  - Google Cloud
+  - google cloud
+  - Google Cloud Platform
+
+Spark:
+  - Apache Spark
+  - apache spark
+  - PySpark
+  - pyspark
+
+Kafka:
+  - Apache Kafka
+  - apache kafka
+
+Airflow:
+  - Apache Airflow
+  - apache airflow
+
+Selenium:
+  - selenium
+  - SELENIUM
+
+Jest:
+  - jest
+  - JEST
+
+Pytest:
+  - pytest
+  - PyTest
+
+Streamlit:
+  - streamlit
+  - STREAMLIT
+
+Hugging Face:
+  - HuggingFace
+  - huggingface
+  - transformers
+
+FAISS:
+  - faiss
+  - faiss-cpu
+
+Pydantic:
+  - pydantic
+  - PYDANTIC
+
+C++:
+  - cpp
+  - CPP
+  - c plus plus
+
+C#:
+  - csharp
+  - CSharp
+  - dotnet
+
+Ruby:
+  - ruby
+  - RUBY
+
+Go:
+  - golang
+  - Golang
+  - GOLANG
+
+Rust:
+  - rust
+  - RUST
+
+Swift:
+  - swift
+  - SWIFT
+
+Kotlin:
+  - kotlin
+  - KOTLIN
+
+R:
+  - r programming
+  - R Programming
+  - rlang
+
+Scala:
+  - scala
+  - SCALA
+
+PHP:
+  - php
+  - PHP
+
+Vue.js:
+  - Vue
+  - VueJS
+  - Vue JS
+
+Angular:
+  - AngularJS
+  - Angular JS
+  - angular
+
+Next.js:
+  - NextJS
+  - Next JS
+  - next
+
+Express.js:
+  - Express
+  - ExpressJS
+  - express
+
+Tailwind:
+  - TailwindCSS
+  - Tailwind CSS
+  - tailwind
+
+Bootstrap:
+  - bootstrap
+  - BOOTSTRAP
+
+JWT:
+  - jwt
+  - JSON Web Token
+
+OAuth:
+  - oauth
+  - OAuth2
+  - oauth2
+
+Jupyter:
+  - jupyter notebook
+  - Jupyter Notebook
+  - ipynb
+
+Matplotlib:
+  - matplotlib
+  - pyplot
+
+Weights and Biases:
+  - wandb
+  - WandB
+
+MLflow:
+  - mlflow
+  - MLFlow
+
+Celery:
+  - celery
+  - CELERY
+
+RabbitMQ:
+  - rabbitmq
+  - RabbitMQ
+
+Nginx:
+  - nginx
+  - NGINX
+
+PostgreSQL:
+  - postgres
+  - psql
+
+SQLAlchemy:
+  - sqlalchemy
+  - SQLAlchemy
+
+Prisma:
+  - prisma
+  - PRISMA
+
+Supabase:
+  - supabase
+  - SUPABASE
+
+Vercel:
+  - vercel
+  - VERCEL
+
+Heroku:
+  - heroku
+  - HEROKU
+
+Netlify:
+  - netlify
+  - NETLIFY
+
+Jira:
+  - jira
+  - JIRA
+
+Notion:
+  - notion
+  - NOTION
+
+Slack API:
+  - slack api
+  - Slack SDK
+
+Twilio:
+  - twilio
+  - TWILIO
+
+Stripe:
+  - stripe
+  - STRIPE
+
+
+Jupyter:
+  - jupyter notebook
+  - Jupyter Notebook
+  - ipynb
+
+Matplotlib:
+  - matplotlib
+  - pyplot
+
+Weights and Biases:
+  - wandb
+  - WandB
+
+MLflow:
+  - mlflow
+  - MLFlow
+
+Celery:
+  - celery
+  - CELERY
+
+RabbitMQ:
+  - rabbitmq
+  - RabbitMQ
+
+Nginx:
+  - nginx
+  - NGINX
+
+PostgreSQL:
+  - postgres
+  - psql
+
+SQLAlchemy:
+  - sqlalchemy
+  - SQLAlchemy
+
+Prisma:
+  - prisma
+  - PRISMA
+
+Supabase:
+  - supabase
+  - SUPABASE
+
+Vercel:
+  - vercel
+  - VERCEL
+
+Heroku:
+  - heroku
+  - HEROKU
+
+Netlify:
+  - netlify
+  - NETLIFY
+
+Jira:
+  - jira
+  - JIRA
+
+Notion:
+  - notion
+  - NOTION
+
+Slack API:
+  - slack api
+  - Slack SDK
+
+Twilio:
+  - twilio
+  - TWILIO
+
+Stripe:
+  - stripe
+  - STRIPE
+
