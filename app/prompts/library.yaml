@@ -1,129 +1,37 @@
-# ============================================================
-# HireAI Copilot - Prompt Library (G4 owns)
-# ============================================================
-# Schema (locked W1):
-#   <prompt_id>:
-#     version:     int, bump on every change
-#     description: 1-line summary
-#     model:       which OpenAI model
-#     temperature: float
-#     json_mode:   bool (optional, default false)
-#     template:    the prompt; use {placeholder} for variables
-#     changelog:   list of "vN: <what changed>"
-#
-# Rules (enforced via PR review by G4):
-#   1. Bump `version` on every change.
-#   2. Add a one-line entry to `changelog`.
-#   3. Run evals before merging - attach delta to PR.
-#   4. Never put real PII in test prompts.
-# ============================================================
-
-parser_main:
-  version: 4
-  description: "Resume parsing - extracts structured candidate JSON from raw resume text."
-  model: gemma3:4b
+# Prompt registration draft for G4 review.
+g2_intent_parser:
+  version: 3
+  description: "Week 3 G2 intent parser for filter and semantic candidate search."
+  model: gemma3:latest
   temperature: 0.1
-  json_mode: true
   template: |
-    You are a recruitment data extraction system. Read the resume below
-    and extract structured fields. Return ONLY valid JSON matching this exact schema:
+    Convert this recruiter query into a structured candidate search.
 
-    {{
-      "name": "string",
-      "email": "string",
-      "phone": "string or null",
-      "skills": ["array of strings"],
-      "experience_years": <number, total years of professional experience>,
-      "education": "highest degree + institution, e.g. 'B.Tech, IIT Madras'",
-      "projects": ["array of project titles, max 5"],
-      "summary": "1-2 sentences on this candidate's strengths",
-      "parse_confidence": <float 0-1, how confident the resume is well-formed>
-    }}
+    Classify the query as exactly one of:
+    - "filter": explicit filters such as skills, experience, job, label, status, or top-K.
+    - "semantic": natural-language similarity or project/background searches.
 
-    Rules:
-    - PHONE: If no phone number appears in the resume, set "phone" to null. Do not guess or
-      invent a number. Only populate it if a phone number is explicitly present in the text.
-    - SKILLS: Copy skill names exactly as written in the resume. Do NOT paraphrase, generalise,
-      or rename. If the resume says "Node.js", output "Node.js" — not "Node" or "NodeJS".
-      If the resume says "REST API", output "REST API" — not "REST" or "APIs".
-      Include every distinct technical skill, tool, framework, and language listed.
-      Do NOT include soft skills like "teamwork", "leadership", or "communication".
-    - EXPERIENCE: If experience years are not explicitly stated, infer from earliest job date.
-      For students or fresh graduates with no work experience, set experience_years to 0.
-    - If email is missing or malformed, set parse_confidence < 0.5.
-    - Output JSON only. No markdown, no explanation, no trailing text.
-
-    Resume:
-    ```
-    {resume_text}
-    ```
-  changelog:
-    - "v1: initial - covers extraction schema, skill normalization rules, JSON-only output"
-    - "v2: G1 prompt iteration - tightened normalization examples"
-    - "v3: restored json_mode flag dropped in v2"
-    - "v4: phone must be null when absent (not guessed); skills must be verbatim from resume text, not paraphrased"
-
-intent_classifier:
-  version: 1
-  description: "Copilot - converts free-text recruiter query into a structured filter spec."
-  model: gemma3:4b
-  temperature: 0.1
-  json_mode: true
-  template: |
-    Convert this recruiter query into a structured search.
-    Return ONLY a JSON object with this schema:
-
-    {{
+    Return ONLY valid JSON with this schema:
+    {
       "type": "filter" | "semantic",
-      "job_id": "string or null",
-      "skills_required": ["array of skill names"],
+      "job_id": <integer or null>,
+      "skills_required": ["skill names"],
       "min_experience": <number or null>,
       "label_filter": "Good Fit" | "Average Fit" | "Poor Fit" | null,
       "status_filter": "Applied" | "Shortlisted" | "Interviewed" | "Hired" | "Rejected" | null,
       "top_k": <integer, default 10>,
-      "free_text": "<remaining query text after filters extracted, may be empty>"
-    }}
+      "free_text": "<semantic search text or remaining meaningful role/keyword text>"
+    }
 
     Examples:
-    Query: "Show top 5 Python developers for JOB0012"
-    Output: {{"type":"filter","job_id":"JOB0012","skills_required":["Python"],"min_experience":null,"label_filter":null,"status_filter":null,"top_k":5,"free_text":""}}
+    Query: "Show top 5 Good Fit Python developers"
+    Output: {"type":"filter","job_id":null,"skills_required":["Python"],"min_experience":null,"label_filter":"Good Fit","status_filter":null,"top_k":5,"free_text":""}
 
     Query: "Candidates similar to Priya who built fintech apps"
-    Output: {{"type":"semantic","job_id":null,"skills_required":[],"min_experience":null,"label_filter":null,"status_filter":null,"top_k":10,"free_text":"similar to Priya, built fintech apps"}}
+    Output: {"type":"semantic","job_id":null,"skills_required":[],"min_experience":null,"label_filter":null,"status_filter":null,"top_k":10,"free_text":"Candidates similar to Priya who built fintech apps"}
 
     Query: "{query}"
-    Output:
   changelog:
-    - "v1: initial - 5 filter dimensions + semantic fallback, 2 few-shot examples"
-
-explanation:
-  version: 1
-  description: "XAI - generates 3-4 sentence neutral, factual explanation of a candidate score."
-  model: gemma3:4b
-  temperature: 0.2
-  json_mode: false
-  template: |
-    You are explaining an AI-generated candidate score to a recruiter.
-    Be concise, factual, and neutral. Do NOT use subjective words like
-    'great', 'excellent', 'unfortunately', or 'sadly'. Do NOT mention
-    demographics, age, gender, or location.
-
-    Inputs:
-    - Candidate name: {name}
-    - Job title: {job_title}
-    - Composite score: {score}/100, label: {label}
-    - Skills match: {skills_match}/100 ({matched_count} of {required_count} required skills)
-    - Experience: {candidate_exp} years (job requires {required_exp})
-    - Project relevance: {project_score}/100
-    - Matched skills: {matched_skills}
-    - Missing skills: {missing_skills}
-
-    Write exactly 3-4 sentences in this structure:
-    1. State the candidate name, job title, score, and label.
-    2. State strengths: which required skills they match and their experience.
-    3. State gaps: which required skills are missing.
-    4. Optional: comment on project relevance if score >75 or <40.
-
-    Output the explanation only - no preamble, no headers.
-  changelog:
-    - "v1: initial - locked 3-4 sentence structure, bias-free tone rules"
+    - "v1: Week 1 prompt extracted job_id and top_k for one hardcoded query flow."
+    - "v2: Added skill, experience, label, and status filters for Week 2 dataset-backed retrieval."
+    - "v3: Added filter vs semantic query classification for FAISS-backed Week 3 retrieval."

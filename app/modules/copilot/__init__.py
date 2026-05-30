@@ -1,1 +1,1 @@
-"""Business logic services for the AI Copilot Engine."""
+"""G2 AI Copilot Engine module."""
