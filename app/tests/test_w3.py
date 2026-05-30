@@ -68,27 +68,27 @@ def test_copilot_no_match_returns_404(monkeypatch):
 # ---- explain endpoint --------------------------------------------------
 
 def test_explain_known_candidate(monkeypatch):
-    """Known mock candidate returns a structured response."""
+    """Known CSV-backed candidate/job pair returns a structured response."""
     monkeypatch.setattr(
         "app.modules.explain.generator.llm_call",
         lambda prompt, **kwargs: (
-            "Arjun Sharma scores 74/100 for Backend Engineer. "
-            "Matched skills include Python, FastAPI, and Docker. "
-            "Kafka and Airflow are not present in the candidate profile."
+            "Lakshmi Yang scores 54/100 for Data Scientist. "
+            "Matched skills include machine learning, SQL, and TensorFlow. "
+            "Python, pandas, and scikit-learn are not present in the candidate profile."
         ),
     )
-    resp = client.post("/explain/", json={"candidate_id": "C1", "job_id": "J1"})
+    resp = client.post("/explain/", json={"candidate_id": "1003", "job_id": "3"})
     assert resp.status_code == 200
     body = resp.json()
-    assert body["candidate_id"] == "C1"
-    assert body["job_id"] == "J1"
+    assert body["candidate_id"] == "1003"
+    assert body["job_id"] == "3"
     assert len(body["explanation_text"]) > 0
     assert isinstance(body["top_strengths"], list)
     assert isinstance(body["top_gaps"], list)
 
 
 def test_explain_unknown_candidate_returns_not_found():
-    resp = client.post("/explain/", json={"candidate_id": "DOESNOTEXIST", "job_id": "J1"})
+    resp = client.post("/explain/", json={"candidate_id": "DOESNOTEXIST", "job_id": "1"})
     assert resp.status_code == 200
     body = resp.json()
     assert "not found" in body["explanation_text"].lower()
@@ -103,7 +103,7 @@ def test_explain_llm_receives_module_kwarg(monkeypatch):
         return "Score is 74. Matched Python, FastAPI, Docker. Missing Kafka, Airflow. Projects are relevant."
 
     monkeypatch.setattr("app.modules.explain.generator.llm_call", capture_llm)
-    client.post("/explain/", json={"candidate_id": "C1", "job_id": "J1"})
+    client.post("/explain/", json={"candidate_id": "1003", "job_id": "3"})
     assert "module" in received_kwargs, "llm_call must receive module= kwarg"
     assert received_kwargs["module"] == "explain"
 
