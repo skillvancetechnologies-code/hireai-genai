@@ -1,95 +1,126 @@
-candidate_data = {
-    "C1": {
-        "name": "Arjun Sharma",
-        "job_title": "Backend Engineer",
-        "score": 74,
-        "label": "Good Fit",
-        "skills_match": 78,
-        "matched_count": 3,
-        "required_count": 5,
-        "matched_skills": "Python, FastAPI, Docker",
-        "missing_skills": "Kafka, Airflow",
-        "candidate_exp": 2,
-        "required_exp": 4,
-        "project_score": 80
-    },
+import csv
+from pathlib import Path
 
-    "C2": {
-        "name": "Priya Nair",
-        "job_title": "Data Scientist",
-        "score": 92,
-        "label": "Good Fit",
-        "skills_match": 100,
-        "matched_count": 5,
-        "required_count": 5,
-        "matched_skills": "Python, TensorFlow, SQL, Spark, Pandas",
-        "missing_skills": "None",
-        "candidate_exp": 5,
-        "required_exp": 3,
-        "project_score": 95
-    },
 
-    "C3": {
-        "name": "Rahul Verma",
-        "job_title": "Frontend Developer",
-        "score": 45,
-        "label": "Average Fit",
-        "skills_match": 40,
-        "matched_count": 2,
-        "required_count": 5,
-        "matched_skills": "HTML, CSS",
-        "missing_skills": "React, TypeScript, Node.js",
-        "candidate_exp": 1,
-        "required_exp": 2,
-        "project_score": 50
-    },
+BASE_DIR = Path(__file__).resolve().parents[3]
+DATA_DIR = BASE_DIR / "data"
 
-    "C4": {
-        "name": "Sneha Iyer",
-        "job_title": "ML Engineer",
-        "score": 28,
-        "label": "Poor Fit",
-        "skills_match": 20,
-        "matched_count": 1,
-        "required_count": 5,
-        "matched_skills": "Python",
-        "missing_skills": "PyTorch, Kubernetes, Airflow, Spark",
-        "candidate_exp": 0,
-        "required_exp": 3,
-        "project_score": 30
-    },
+CANDIDATES_PATH = DATA_DIR / "candidates.csv"
+JOBS_PATH = DATA_DIR / "jobs.csv"
+SCORES_PATH = DATA_DIR / "scores.csv"
+APPLICATIONS_PATH = DATA_DIR / "applications.csv"
 
-    "C5": {
-        "name": "Karan Mehta",
-        "job_title": "DevOps Engineer",
-        "score": 88,
-        "label": "Good Fit",
-        "skills_match": 90,
-        "matched_count": 4,
-        "required_count": 5,
-        "matched_skills": "Docker, Kubernetes, AWS, Terraform",
-        "missing_skills": "Ansible",
-        "candidate_exp": 4,
-        "required_exp": 3,
-        "project_score": 85
+candidate_data = {}
+job_data = {}
+candidate_job_data = {}
+
+
+def _read_csv(path: Path) -> list[dict]:
+    with path.open(newline="", encoding="utf-8") as file:
+        return list(csv.DictReader(file))
+
+
+def _split_pipe(value: str | None) -> list[str]:
+    if not value:
+        return []
+    return [item.strip() for item in value.split("|") if item.strip()]
+
+
+def _format_list(values: list[str]) -> str:
+    return ", ".join(values) if values else "None"
+
+
+def _to_float(value, default: float = 0.0) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _title(value, fallback: str) -> str:
+    clean_value = str(value or "").strip()
+    return clean_value.title() if clean_value else fallback
+
+
+def _load_real_data() -> None:
+    candidates = {
+        str(row["candidate_id"]).strip(): {
+            "candidate_id": str(row["candidate_id"]).strip(),
+            "name": _title(row.get("name"), "Candidate"),
+            "skills": _split_pipe(row.get("skills")),
+            "experience_years": _to_float(row.get("experience_years")),
+            "projects": _split_pipe(row.get("projects")),
+        }
+        for row in _read_csv(CANDIDATES_PATH)
     }
-}
 
-
-job_data = {
-    "J1": {
-        "title": "Backend Engineer"
-    },
-    "J2": {
-        "title": "Data Scientist"
-    },
-    "J3": {
-        "title": "Frontend Developer"
-    },
-    "J4": {
-        "title": "ML Engineer"
-    },
-    "J5": {
-        "title": "DevOps Engineer"
+    jobs = {
+        str(row["job_id"]).strip(): {
+            "job_id": str(row["job_id"]).strip(),
+            "job_title": _title(row.get("role"), "Job"),
+            "required_skills": _split_pipe(row.get("required_skills")),
+            "min_experience": _to_float(row.get("min_experience")),
+        }
+        for row in _read_csv(JOBS_PATH)
     }
-}
+
+    applications = {
+        (str(row["candidate_id"]).strip(), str(row["job_id"]).strip()): row
+        for row in _read_csv(APPLICATIONS_PATH)
+    }
+
+    candidate_data.update(candidates)
+    job_data.update(jobs)
+
+    for score_row in _read_csv(SCORES_PATH):
+        cid = str(score_row["candidate_id"]).strip()
+        jid = str(score_row["job_id"]).strip()
+        candidate = candidates.get(cid)
+        job = jobs.get(jid)
+        if not candidate or not job:
+            continue
+
+        candidate_skills = candidate["skills"]
+        required_skills = job["required_skills"]
+        candidate_skills_lower = {skill.lower(): skill for skill in candidate_skills}
+        matched_skills = [
+            skill for skill in required_skills
+            if skill.lower() in candidate_skills_lower
+        ]
+        missing_skills = [
+            skill for skill in required_skills
+            if skill.lower() not in candidate_skills_lower
+        ]
+        application = applications.get((cid, jid), {})
+
+        candidate_job_data[(cid, jid)] = {
+            "candidate_id": cid,
+            "job_id": jid,
+            "name": candidate["name"],
+            "job_title": job["job_title"],
+            "score": _to_float(score_row.get("score")),
+            "label": _title(score_row.get("label"), "Unknown Fit"),
+            "skills_match": _to_float(score_row.get("skills_match")),
+            "matched_count": len(matched_skills),
+            "required_count": len(required_skills),
+            "matched_skills": _format_list(matched_skills),
+            "missing_skills": _format_list(missing_skills),
+            "candidate_exp": candidate["experience_years"],
+            "required_exp": job["min_experience"],
+            "project_score": _to_float(score_row.get("project_score")),
+            "application_status": application.get("status", "unknown"),
+            "application_date": application.get("application_date", "unknown"),
+        }
+
+
+def get_candidate_job_data(candidate_id: str, job_id: str) -> dict | None:
+    return candidate_job_data.get((str(candidate_id), str(job_id)))
+
+
+try:
+    _load_real_data()
+except FileNotFoundError as exc:
+    print(f"WARNING: required data file not found: {exc.filename}")
+    candidate_data.clear()
+    job_data.clear()
+    candidate_job_data.clear()

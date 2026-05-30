@@ -1,27 +1,452 @@
 [
   {
     "id": "explain_001",
-    "input": {"candidate_id": "C1", "job_id": "J1"},
-    "expected": {}
+    "input": {
+      "candidate_id": "1003",
+      "job_id": "3"
+    },
+    "expected": {
+      "candidate_name": "lakshmi yang",
+      "job_title": "data scientist",
+      "score": 54.0,
+      "label": "average fit",
+      "top_strengths": ["machine learning", "sql", "tensorflow"],
+      "top_gaps": ["python", "pandas", "scikit-learn"]
+    }
   },
   {
     "id": "explain_002",
-    "input": {"candidate_id": "C2", "job_id": "J2"},
-    "expected": {}
+    "input": {
+      "candidate_id": "1003",
+      "job_id": "8"
+    },
+    "expected": {
+      "candidate_name": "lakshmi yang",
+      "job_title": "data engineer",
+      "score": 35.0,
+      "label": "poor fit",
+      "top_strengths": ["sql"],
+      "top_gaps": ["spark", "kafka", "airflow", "python", "aws", "hadoop", "dbt"]
+    }
   },
   {
     "id": "explain_003",
-    "input": {"candidate_id": "C3", "job_id": "J3"},
-    "expected": {}
+    "input": {
+      "candidate_id": "1010",
+      "job_id": "7"
+    },
+    "expected": {
+      "candidate_name": "pedro white",
+      "job_title": "full stack developer",
+      "score": 76.1,
+      "label": "good fit",
+      "top_strengths": ["react", "mongodb", "postgresql"],
+      "top_gaps": ["node.js", "express", "docker", "git"]
+    }
   },
   {
     "id": "explain_004",
-    "input": {"candidate_id": "C4", "job_id": "J4"},
-    "expected": {}
+    "input": {
+      "candidate_id": "1011",
+      "job_id": "1"
+    },
+    "expected": {
+      "candidate_name": "shreya gonzalez",
+      "job_title": "backend engineer",
+      "score": 54.3,
+      "label": "average fit",
+      "top_strengths": ["python"],
+      "top_gaps": ["django", "rest api", "postgresql", "redis", "docker"]
+    }
   },
   {
     "id": "explain_005",
-    "input": {"candidate_id": "C5", "job_id": "J5"},
-    "expected": {}
+    "input": {
+      "candidate_id": "1014",
+      "job_id": "6"
+    },
+    "expected": {
+      "candidate_name": "pooja rao",
+      "job_title": "machine learning engineer",
+      "score": 55.8,
+      "label": "average fit",
+      "top_strengths": ["sql"],
+      "top_gaps": ["python", "tensorflow", "pytorch", "mlflow", "kubernetes"]
+    }
+  },
+  {
+    "id": "explain_006",
+    "input": {
+      "candidate_id": "1014",
+      "job_id": "8"
+    },
+    "expected": {
+      "candidate_name": "pooja rao",
+      "job_title": "data engineer",
+      "score": 50.7,
+      "label": "average fit",
+      "top_strengths": ["sql"],
+      "top_gaps": ["spark", "kafka", "airflow", "python", "aws", "hadoop", "dbt"]
+    }
+  },
+  {
+    "id": "explain_007",
+    "input": {
+      "candidate_id": "1018",
+      "job_id": "3"
+    },
+    "expected": {
+      "candidate_name": "evelyn verma",
+      "job_title": "data scientist",
+      "score": 36.4,
+      "label": "poor fit",
+      "top_strengths": ["python", "pandas", "tensorflow"],
+      "top_gaps": ["machine learning", "scikit-learn", "sql"]
+    }
+  },
+  {
+    "id": "explain_008",
+    "input": {
+      "candidate_id": "1021",
+      "job_id": "6"
+    },
+    "expected": {
+      "candidate_name": "xiao sanchez",
+      "job_title": "machine learning engineer",
+      "score": 53.3,
+      "label": "poor fit",
+      "top_strengths": ["kubernetes"],
+      "top_gaps": ["python", "tensorflow", "pytorch", "mlflow", "sql"]
+    }
+  },
+  {
+    "id": "explain_009",
+    "input": {
+      "candidate_id": "1021",
+      "job_id": "7"
+    },
+    "expected": {
+      "candidate_name": "xiao sanchez",
+      "job_title": "full stack developer",
+      "score": 50.6,
+      "label": "poor fit",
+      "top_strengths": ["docker"],
+      "top_gaps": ["react", "node.js", "mongodb", "express", "postgresql", "git"]
+    }
+  },
+  {
+    "id": "explain_010",
+    "input": {
+      "candidate_id": "1024",
+      "job_id": "5"
+    },
+    "expected": {
+      "candidate_name": "sanya ahmed",
+      "job_title": "mobile developer",
+      "score": 51.0,
+      "label": "average fit",
+      "top_strengths": ["flutter", "dart", "android", "ios", "firebase"],
+      "top_gaps": ["kotlin", "swift"]
+    }
+  },
+  {
+    "id": "explain_011",
+    "input": {
+      "candidate_id": "1025",
+      "job_id": "7"
+    },
+    "expected": {
+      "candidate_name": "rohit chatterjee",
+      "job_title": "full stack developer",
+      "score": 85.1,
+      "label": "good fit",
+      "top_strengths": ["react", "node.js", "mongodb", "postgresql", "git"],
+      "top_gaps": ["express", "docker"]
+    }
+  },
+  {
+    "id": "explain_012",
+    "input": {
+      "candidate_id": "1025",
+      "job_id": "4"
+    },
+    "expected": {
+      "candidate_name": "rohit chatterjee",
+      "job_title": "devops engineer",
+      "score": 59.1,
+      "label": "average fit",
+      "top_strengths": ["aws"],
+      "top_gaps": ["kubernetes", "terraform", "ci/cd", "linux", "docker", "ansible"]
+    }
+  },
+  {
+    "id": "explain_013",
+    "input": {
+      "candidate_id": "1026",
+      "job_id": "9"
+    },
+    "expected": {
+      "candidate_name": "sneha thompson",
+      "job_title": "qa engineer",
+      "score": 56.8,
+      "label": "poor fit",
+      "top_strengths": ["ci/cd"],
+      "top_gaps": ["selenium", "python", "pytest", "jira", "postman", "rest api"]
+    }
+  },
+  {
+    "id": "explain_014",
+    "input": {
+      "candidate_id": "1028",
+      "job_id": "6"
+    },
+    "expected": {
+      "candidate_name": "ananya rodriguez",
+      "job_title": "machine learning engineer",
+      "score": 63.6,
+      "label": "good fit",
+      "top_strengths": ["python", "sql"],
+      "top_gaps": ["tensorflow", "pytorch", "mlflow", "kubernetes"]
+    }
+  },
+  {
+    "id": "explain_015",
+    "input": {
+      "candidate_id": "1032",
+      "job_id": "7"
+    },
+    "expected": {
+      "candidate_name": "mohammed pillai",
+      "job_title": "full stack developer",
+      "score": 62.7,
+      "label": "average fit",
+      "top_strengths": ["react", "postgresql", "git"],
+      "top_gaps": ["node.js", "mongodb", "express", "docker"]
+    }
+  },
+  {
+    "id": "explain_016",
+    "input": {
+      "candidate_id": "1033",
+      "job_id": "8"
+    },
+    "expected": {
+      "candidate_name": "omar thomas",
+      "job_title": "data engineer",
+      "score": 65.6,
+      "label": "average fit",
+      "top_strengths": ["kafka", "airflow", "sql", "dbt"],
+      "top_gaps": ["spark", "python", "aws", "hadoop"]
+    }
+  },
+  {
+    "id": "explain_017",
+    "input": {
+      "candidate_id": "1034",
+      "job_id": "7"
+    },
+    "expected": {
+      "candidate_name": "diego smith",
+      "job_title": "full stack developer",
+      "score": 55.9,
+      "label": "average fit",
+      "top_strengths": ["docker"],
+      "top_gaps": ["react", "node.js", "mongodb", "express", "postgresql", "git"]
+    }
+  },
+  {
+    "id": "explain_018",
+    "input": {
+      "candidate_id": "1036",
+      "job_id": "10"
+    },
+    "expected": {
+      "candidate_name": "fatima johnson",
+      "job_title": "product manager",
+      "score": 66.3,
+      "label": "poor fit",
+      "top_strengths": ["sql"],
+      "top_gaps": ["agile", "roadmapping", "jira", "stakeholder management", "analytics"]
+    }
+  },
+  {
+    "id": "explain_019",
+    "input": {
+      "candidate_id": "1036",
+      "job_id": "3"
+    },
+    "expected": {
+      "candidate_name": "fatima johnson",
+      "job_title": "data scientist",
+      "score": 49.8,
+      "label": "average fit",
+      "top_strengths": ["scikit-learn", "sql"],
+      "top_gaps": ["python", "machine learning", "pandas", "tensorflow"]
+    }
+  },
+  {
+    "id": "explain_020",
+    "input": {
+      "candidate_id": "1037",
+      "job_id": "6"
+    },
+    "expected": {
+      "candidate_name": "lakshmi rodriguez",
+      "job_title": "machine learning engineer",
+      "score": 36.0,
+      "label": "poor fit",
+      "top_strengths": ["kubernetes"],
+      "top_gaps": ["python", "tensorflow", "pytorch", "mlflow", "sql"]
+    }
+  },
+  {
+    "id": "explain_021",
+    "input": {
+      "candidate_id": "1040",
+      "job_id": "10"
+    },
+    "expected": {
+      "candidate_name": "jorge rivera",
+      "job_title": "product manager",
+      "score": 56.6,
+      "label": "average fit",
+      "top_strengths": ["sql"],
+      "top_gaps": ["agile", "roadmapping", "jira", "stakeholder management", "analytics"]
+    }
+  },
+  {
+    "id": "explain_022",
+    "input": {
+      "candidate_id": "1040",
+      "job_id": "8"
+    },
+    "expected": {
+      "candidate_name": "jorge rivera",
+      "job_title": "data engineer",
+      "score": 65.5,
+      "label": "good fit",
+      "top_strengths": ["spark", "sql", "hadoop", "dbt"],
+      "top_gaps": ["kafka", "airflow", "python", "aws"]
+    }
+  },
+  {
+    "id": "explain_023",
+    "input": {
+      "candidate_id": "1041",
+      "job_id": "4"
+    },
+    "expected": {
+      "candidate_name": "isabella pillai",
+      "job_title": "devops engineer",
+      "score": 23.6,
+      "label": "poor fit",
+      "top_strengths": ["aws"],
+      "top_gaps": ["kubernetes", "terraform", "ci/cd", "linux", "docker", "ansible"]
+    }
+  },
+  {
+    "id": "explain_024",
+    "input": {
+      "candidate_id": "1048",
+      "job_id": "5"
+    },
+    "expected": {
+      "candidate_name": "omkar martin",
+      "job_title": "mobile developer",
+      "score": 69.7,
+      "label": "poor fit",
+      "top_strengths": ["flutter", "dart", "kotlin", "ios"],
+      "top_gaps": ["android", "swift", "firebase"]
+    }
+  },
+  {
+    "id": "explain_025",
+    "input": {
+      "candidate_id": "1048",
+      "job_id": "9"
+    },
+    "expected": {
+      "candidate_name": "omkar martin",
+      "job_title": "qa engineer",
+      "score": 43.4,
+      "label": "poor fit",
+      "top_strengths": ["rest api"],
+      "top_gaps": ["selenium", "python", "pytest", "jira", "postman", "ci/cd"]
+    }
+  },
+  {
+    "id": "explain_026",
+    "input": {
+      "candidate_id": "1049",
+      "job_id": "2"
+    },
+    "expected": {
+      "candidate_name": "ethan hernandez",
+      "job_title": "frontend engineer",
+      "score": 68.3,
+      "label": "average fit",
+      "top_strengths": ["css", "html", "redux", "webpack"],
+      "top_gaps": ["react", "javascript", "typescript"]
+    }
+  },
+  {
+    "id": "explain_027",
+    "input": {
+      "candidate_id": "1052",
+      "job_id": "3"
+    },
+    "expected": {
+      "candidate_name": "anjali mehta",
+      "job_title": "data scientist",
+      "score": 74.3,
+      "label": "good fit",
+      "top_strengths": ["python", "machine learning", "scikit-learn"],
+      "top_gaps": ["pandas", "sql", "tensorflow"]
+    }
+  },
+  {
+    "id": "explain_028",
+    "input": {
+      "candidate_id": "1052",
+      "job_id": "8"
+    },
+    "expected": {
+      "candidate_name": "anjali mehta",
+      "job_title": "data engineer",
+      "score": 56.1,
+      "label": "good fit",
+      "top_strengths": ["python"],
+      "top_gaps": ["spark", "kafka", "airflow", "sql", "aws", "hadoop", "dbt"]
+    }
+  },
+  {
+    "id": "explain_029",
+    "input": {
+      "candidate_id": "1055",
+      "job_id": "5"
+    },
+    "expected": {
+      "candidate_name": "aryan chauhan",
+      "job_title": "mobile developer",
+      "score": 53.2,
+      "label": "average fit",
+      "top_strengths": ["android", "kotlin"],
+      "top_gaps": ["flutter", "dart", "ios", "swift", "firebase"]
+    }
+  },
+  {
+    "id": "explain_030",
+    "input": {
+      "candidate_id": "1057",
+      "job_id": "3"
+    },
+    "expected": {
+      "candidate_name": "noah sinha",
+      "job_title": "data scientist",
+      "score": 70.5,
+      "label": "average fit",
+      "top_strengths": ["python", "machine learning", "pandas", "scikit-learn"],
+      "top_gaps": ["sql", "tensorflow"]
+    }
   }
 ]

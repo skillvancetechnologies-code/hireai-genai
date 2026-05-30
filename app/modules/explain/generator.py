@@ -1,7 +1,17 @@
 from app.core.config import get_settings
 from app.core.llm import llm_call
 from app.core.prompts import load_prompt
-from app.modules.explain.mock_data import candidate_data, job_data
+from app.modules.explain.mock_data import (
+    candidate_data,
+    get_candidate_job_data,
+    job_data,
+)
+
+
+def _split_output_list(value: str) -> list[str]:
+    if not value or value == "None":
+        return []
+    return [item.strip() for item in value.split(",") if item.strip()]
 
 
 def generate_explanation(candidate_id: str, job_id: str) -> dict:
@@ -23,7 +33,16 @@ def generate_explanation(candidate_id: str, job_id: str) -> dict:
             "top_gaps": [],
         }
 
-    candidate = candidate_data[candidate_id]
+    candidate = get_candidate_job_data(candidate_id, job_id)
+    if candidate is None:
+        return {
+            "candidate_id": candidate_id,
+            "job_id": job_id,
+            "explanation_text": "Score not found for this candidate and job",
+            "top_strengths": [],
+            "top_gaps": [],
+        }
+
     settings = get_settings()
     prompt_spec = load_prompt("explanation")
 
@@ -59,6 +78,6 @@ def generate_explanation(candidate_id: str, job_id: str) -> dict:
         "candidate_id": candidate_id,
         "job_id": job_id,
         "explanation_text": explanation,
-        "top_strengths": candidate["matched_skills"].split(", "),
-        "top_gaps": candidate["missing_skills"].split(", "),
+        "top_strengths": _split_output_list(candidate["matched_skills"]),
+        "top_gaps": _split_output_list(candidate["missing_skills"]),
     }
