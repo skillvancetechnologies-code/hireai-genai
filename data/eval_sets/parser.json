@@ -25,7 +25,7 @@
   },
   {
     "id": "case_03",
-    "input": "Prasanthi_CV.pdf",
+    "input": "Prasanthi Product Analyst CV - prasanthi badarvada.pdf",
     "expected": {
       "name": "B D N PRASANTHI",
       "email": "prasanthibadarvada@gmail.com",
@@ -37,7 +37,7 @@
   },
   {
     "id": "case_04",
-    "input": "Mujahid_Amin_CV.pdf",
+    "input": "Mujahid Amin CV - Mujahid Amin.pdf",
     "expected": {
       "name": "MUJAHID AMIN",
       "email": "mujahidameen205@gmail.com",
@@ -49,7 +49,7 @@
   },
   {
     "id": "case_05",
-    "input": "Mohammed_Khalil.pdf",
+    "input": "Mohammed Khalil - Flutter Developer - Mohammed Klil.pdf",
     "expected": {
       "name": "Mohammed Khalil",
       "email": "klilmohammed9@gmail.com",
@@ -61,7 +61,7 @@
   },
   {
     "id": "case_06",
-    "input": "Menna_Allah.pdf",
+    "input": "Menna_Allah_Saed_Abd_El-hafeze - menna saed.pdf",
     "expected": {
       "name": "Menna Allah Saed Abd El-hafeze",
       "email": "mena.seaad23@gmail.com",
@@ -73,7 +73,7 @@
   },
   {
     "id": "case_07",
-    "input": "Sowmya_Rajarajan.pdf",
+    "input": "Jan26 - Sowmya Rajarajan.pdf",
     "expected": {
       "name": "Sowmya Rajarajan",
       "email": "sowmyarajarajan.tech@gmail.com",
@@ -85,7 +85,7 @@
   },
   {
     "id": "case_08",
-    "input": "JAYASHREE_RESUME.pdf",
+    "input": "JAYASHREE(RESUME).pdf",
     "expected": {
       "name": "THUPAKULA JAYASHREE",
       "email": "jayashreeshetty250206@gmail.com",
@@ -97,7 +97,7 @@
   },
   {
     "id": "case_09",
-    "input": "Mughal_Arshad_Resume.pdf",
+    "input": "Mughal Arshad - Resume.pdf",
     "expected": {
       "name": "MUGHAL ARSHAD",
       "email": "arshadmsb@gmail.com",
@@ -109,7 +109,7 @@
   },
   {
     "id": "case_10",
-    "input": "Niyati_Sachdeva.pdf",
+    "input": "Resume_Template_by_Krishna_Priyatham_Potluri (1) - Niyati Sachdeva.pdf",
     "expected": {
       "name": "Niyati Sachdeva",
       "email": "sachdeva.niyati17@gmail.com",

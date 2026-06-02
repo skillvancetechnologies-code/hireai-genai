@@ -1,59 +1,22 @@
 import json
-import os
 from typing import Any
 
-from dotenv import load_dotenv
-
-
-load_dotenv()
-
-
-INTENT_PROMPT_TEMPLATE = """
-Convert this recruiter query into a structured candidate filter search.
-
-Week 2 supports filtering only. Do not use semantic search.
-
-Return ONLY valid JSON with this schema:
-{{
-  "type": "filter",
-  "job_id": <integer or null>,
-  "skills_required": ["skill names"],
-  "min_experience": <number or null>,
-  "label_filter": "Good Fit" | "Average Fit" | "Poor Fit" | null,
-  "status_filter": "Applied" | "Shortlisted" | "Interviewed" | "Hired" | "Rejected" | null,
-  "top_k": <integer, default 10>,
-  "free_text": "<remaining meaningful role or keyword text, or empty string>"
-}}
-
-Examples:
-Query: "Show top 5 Good Fit Python developers"
-Output: {{"type":"filter","job_id":null,"skills_required":["Python"],"min_experience":null,"label_filter":"Good Fit","status_filter":null,"top_k":5,"free_text":""}}
-
-Query: "Show shortlisted Python developers with 2 years experience"
-Output: {{"type":"filter","job_id":null,"skills_required":["Python"],"min_experience":2,"label_filter":null,"status_filter":"Shortlisted","top_k":10,"free_text":""}}
-
-Query: "Top 3 backend developers"
-Output: {{"type":"filter","job_id":null,"skills_required":[],"min_experience":null,"label_filter":null,"status_filter":null,"top_k":3,"free_text":"backend"}}
-
-Recruiter query: {query}
-"""
-
-
-def get_llm() -> Any:
-    """Create the Ollama-backed LangChain model used for intent parsing."""
-    from langchain_ollama import OllamaLLM
-
-    model_name = os.getenv("OLLAMA_MODEL", "gemma3:latest")
-    return OllamaLLM(model=model_name, temperature=0.1)
+from app.core.config import get_settings
+from app.core.llm import llm_call
+from app.core.prompts import load_prompt
 
 
 def parse_intent_with_llm(query: str) -> dict[str, Any]:
     """Ask the local LLM to convert recruiter text into JSON filter intent."""
-    from langchain_core.prompts import PromptTemplate
-
-    prompt = PromptTemplate.from_template(INTENT_PROMPT_TEMPLATE)
-    chain = prompt | get_llm()
-    raw_response = chain.invoke({"query": query})
+    settings = get_settings()
+    prompt_spec = load_prompt("intent_classifier")
+    rendered = prompt_spec.format(query=query)
+    raw_response = llm_call(
+        rendered,
+        module="copilot",
+        model=settings.copilot_model,
+        temperature=prompt_spec.temperature,
+    )
     return _extract_json(raw_response)
 
 

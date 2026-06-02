@@ -1,20 +1,52 @@
 [
   {
-    "id": "copilot_001",
-    "input": {
-      "query": "Show top 5 Python developers for JOB0012"
-    },
-    "expected": {
-      "candidate_ids": ["CAND0001", "CAND0042", "CAND0099"]
-    }
+    "id": "copilot_01",
+    "input": "Show Python developers",
+    "expected": {"type": "filter", "skills_required": ["Python"], "top_k": 10}
   },
   {
-    "id": "copilot_002",
-    "input": {
-      "query": "Who has React and Node.js with 2+ years?"
-    },
-    "expected": {
-      "candidate_ids": ["CAND0007", "CAND0023"]
-    }
+    "id": "copilot_02",
+    "input": "React developers with 2 years experience",
+    "expected": {"type": "filter", "skills_required": ["React"], "min_experience": 2, "top_k": 10}
+  },
+  {
+    "id": "copilot_03",
+    "input": "Top 5 candidates for job 1",
+    "expected": {"type": "filter", "job_id": 1, "top_k": 5}
+  },
+  {
+    "id": "copilot_04",
+    "input": "Show Good Fit candidates",
+    "expected": {"type": "filter", "label_filter": "Good Fit", "top_k": 10}
+  },
+  {
+    "id": "copilot_05",
+    "input": "Top 3 backend developers",
+    "expected": {"type": "filter", "top_k": 3, "free_text": "backend"}
+  },
+  {
+    "id": "copilot_06",
+    "input": "Show shortlisted Python developers with 2 years experience",
+    "expected": {"type": "filter", "skills_required": ["Python"], "min_experience": 2, "status_filter": "Shortlisted", "top_k": 10}
+  },
+  {
+    "id": "copilot_07",
+    "input": "Top 4 rejected Docker developers",
+    "expected": {"type": "filter", "skills_required": ["Docker"], "status_filter": "Rejected", "top_k": 4}
+  },
+  {
+    "id": "copilot_08",
+    "input": "Show hired candidates for job 2",
+    "expected": {"type": "filter", "job_id": 2, "status_filter": "Hired", "top_k": 10}
+  },
+  {
+    "id": "copilot_09",
+    "input": "Top 6 Average Fit SQL candidates",
+    "expected": {"type": "filter", "skills_required": ["SQL"], "label_filter": "Average Fit", "top_k": 6}
+  },
+  {
+    "id": "copilot_10",
+    "input": "Show Poor Fit candidates with 5 years experience",
+    "expected": {"type": "filter", "min_experience": 5, "label_filter": "Poor Fit", "top_k": 10}
   }
 ]

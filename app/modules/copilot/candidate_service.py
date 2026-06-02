@@ -1,6 +1,6 @@
-from app.models.schemas import Candidate, QueryIntent
-from app.services.dataset_loader import get_candidate_search_data
-from app.services.filters import apply_filters
+from app.modules.copilot.schemas import Candidate, QueryIntent
+from app.modules.copilot.dataset_loader import get_candidate_search_data
+from app.modules.copilot.filters import apply_filters
 
 
 def get_candidates(intent: QueryIntent) -> list[Candidate]:

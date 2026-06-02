@@ -80,8 +80,10 @@ def test_llm_call_caches(monkeypatch, tmp_path):
         return ("hello world", 5, 2)
 
     monkeypatch.setattr(llm, "_call_ollama", fake_ollama)
-    # Use a unique prompt so cache from prior runs doesn't interfere.
+    # Use a unique prompt and flush any stale Redis entry first so prior
+    # test runs (Redis persists between sessions) don't cause a false cache hit.
     prompt = f"unit-test-{tmp_path.name}"
+    cache.cache_invalidate(llm._build_cache_key("gemma3:4b", 0.2, False, prompt))
 
     r1 = llm.llm_call(prompt, model="gemma3:4b", cache=True, module="test")
     r2 = llm.llm_call(prompt, model="gemma3:4b", cache=True, module="test")
