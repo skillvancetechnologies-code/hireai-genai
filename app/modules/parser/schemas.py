@@ -2,9 +2,6 @@ from typing import List, Optional
 
 from pydantic import BaseModel, EmailStr, Field
 
-from typing import List, Optional
-
-
 class ParsedCandidate(BaseModel):
     name: str = Field(..., max_length=255)
     email: Optional[EmailStr] = None
