@@ -2,10 +2,12 @@ from typing import List, Optional
 
 from pydantic import BaseModel, EmailStr, Field
 
+from typing import List, Optional
+
 
 class ParsedCandidate(BaseModel):
     name: str = Field(..., max_length=255)
-    email: EmailStr
+    email: Optional[EmailStr] = None
     phone: Optional[str] = None
     skills: List[str] = Field(default_factory=list)
     experience_years: float = Field(..., ge=0, le=50)

@@ -1,6 +1,6 @@
 """Parser routes — owned by G1.
 
-POST /parse — accepts a PDF or DOCX file upload and returns a
+POST /parse — accepts a PDF, DOCX, JPG, or PNG file upload and returns a
 ParsedCandidate JSON record validated by Pydantic.
 """
 from __future__ import annotations
@@ -17,21 +17,21 @@ from app.modules.parser.service import parse_resume_file
 log = logging.getLogger(__name__)
 router = APIRouter(prefix="/parse", tags=["parser"])
 
-_ALLOWED_SUFFIXES = {".pdf", ".docx"}
+_ALLOWED_SUFFIXES = {".pdf", ".docx", ".doc", ".jpg", ".jpeg", ".png"}
 
 
 @router.post("")
 async def parse_resume(file: UploadFile = File(...)) -> dict:
     """Parse a resume file and return a structured candidate record.
 
-    Accepts: multipart/form-data with field `file` (PDF or DOCX).
+    Accepts: multipart/form-data with field `file` (PDF, DOCX, JPG, PNG).
     Returns: ParsedCandidate JSON.
     """
     suffix = Path(file.filename or "upload.bin").suffix.lower()
     if suffix not in _ALLOWED_SUFFIXES:
         raise HTTPException(
             status_code=415,
-            detail=f"Unsupported file type '{suffix}'. Upload a .pdf or .docx file.",
+            detail=f"Unsupported file type '{suffix}'. Supported: PDF, DOCX, JPG, PNG.",
         )
 
     content = await file.read()
