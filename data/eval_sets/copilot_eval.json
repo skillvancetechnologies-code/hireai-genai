@@ -1,6 +1,7 @@
 [
   {
     "query": "Show Python developers",
+    "expected_type": "filter",
     "expected": {
       "type": "filter",
       "skills_required": ["Python"],
@@ -9,6 +10,7 @@
   },
   {
     "query": "React developers with 2 years experience",
+    "expected_type": "filter",
     "expected": {
       "type": "filter",
       "skills_required": ["React"],
@@ -18,6 +20,7 @@
   },
   {
     "query": "Top 5 candidates for JOB1",
+    "expected_type": "filter",
     "expected": {
       "type": "filter",
       "job_id": 1,
@@ -26,6 +29,7 @@
   },
   {
     "query": "Show Good Fit candidates",
+    "expected_type": "filter",
     "expected": {
       "type": "filter",
       "label_filter": "Good Fit",
@@ -34,6 +38,7 @@
   },
   {
     "query": "Top 3 backend developers",
+    "expected_type": "filter",
     "expected": {
       "type": "filter",
       "top_k": 3,
@@ -42,6 +47,7 @@
   },
   {
     "query": "Show shortlisted Python developers with 2 years experience",
+    "expected_type": "filter",
     "expected": {
       "type": "filter",
       "skills_required": ["Python"],
@@ -52,6 +58,7 @@
   },
   {
     "query": "Top 4 rejected Docker developers",
+    "expected_type": "filter",
     "expected": {
       "type": "filter",
       "skills_required": ["Docker"],
@@ -61,6 +68,7 @@
   },
   {
     "query": "Show hired candidates for JOB2",
+    "expected_type": "filter",
     "expected": {
       "type": "filter",
       "job_id": 2,
@@ -70,6 +78,7 @@
   },
   {
     "query": "Top 6 Average Fit SQL candidates",
+    "expected_type": "filter",
     "expected": {
       "type": "filter",
       "skills_required": ["SQL"],
@@ -79,10 +88,59 @@
   },
   {
     "query": "Show Poor Fit candidates with 5 years experience",
+    "expected_type": "filter",
     "expected": {
       "type": "filter",
       "min_experience": 5,
       "label_filter": "Poor Fit",
+      "top_k": 10
+    }
+  },
+  {
+    "query": "Candidates similar to Priya who built fintech apps",
+    "expected_type": "semantic",
+    "expected": {
+      "type": "semantic",
+      "top_k": 10
+    }
+  },
+  {
+    "query": "People experienced in AI automation systems",
+    "expected_type": "semantic",
+    "expected": {
+      "type": "semantic",
+      "top_k": 10
+    }
+  },
+  {
+    "query": "Find developers experienced in AI chatbot projects",
+    "expected_type": "semantic",
+    "expected": {
+      "type": "semantic",
+      "top_k": 10
+    }
+  },
+  {
+    "query": "People who worked on backend automation systems",
+    "expected_type": "semantic",
+    "expected": {
+      "type": "semantic",
+      "top_k": 10
+    }
+  },
+  {
+    "query": "Candidates with strong machine learning projects",
+    "expected_type": "semantic",
+    "expected": {
+      "type": "semantic",
+      "top_k": 10
+    }
+  },
+  {
+    "query": "Developers experienced in scalable API systems",
+    "expected_type": "semantic",
+    "expected": {
+      "type": "semantic",
       "top_k": 10
     }
   }
