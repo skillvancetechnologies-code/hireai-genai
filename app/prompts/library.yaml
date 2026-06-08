@@ -1,7 +1,7 @@
 # Prompt registration draft for G4 review.
 g2_intent_parser:
-  version: 3
-  description: "Week 3 G2 intent parser for filter and semantic candidate search."
+  version: 4
+  description: "Week 4 G2 intent parser for filter, semantic, and history-aware candidate search."
   model: gemma3:latest
   temperature: 0.1
   template: |
@@ -35,3 +35,32 @@ g2_intent_parser:
     - "v1: Week 1 prompt extracted job_id and top_k for one hardcoded query flow."
     - "v2: Added skill, experience, label, and status filters for Week 2 dataset-backed retrieval."
     - "v3: Added filter vs semantic query classification for FAISS-backed Week 3 retrieval."
+    - "v4: Parser can be used with resolved conversation context for Week 4 follow-up queries."
+
+g2_candidate_summary:
+  version: 1
+  description: "Week 4 recruiter-friendly candidate summary generator."
+  model: gemma3:latest
+  temperature: 0.1
+  template: |
+    You are an AI recruiter assistant.
+
+    Given the recruiter query and the top candidate profiles, write a concise
+    2-3 sentence summary for a recruiter.
+
+    Focus on:
+    - key skills
+    - experience level
+    - project relevance
+    - overall suitability for the query
+
+    Do not list every candidate individually.
+    Keep the tone professional and recruiter-friendly.
+
+    Recruiter query:
+    {query}
+
+    Candidate profiles:
+    {candidates}
+  changelog:
+    - "v1: Added Week 4 LLM summary generation prompt for top candidate result sets."

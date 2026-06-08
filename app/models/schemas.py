@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -9,6 +9,11 @@ class CopilotRequest(BaseModel):
     query: str = Field(
         ...,
         examples=["Show top 5 Good Fit Python developers"],
+    )
+    history: list[dict[str, Any]] = Field(
+        default_factory=list,
+        max_length=5,
+        description="Last 5 conversation turns for contextual follow-up queries.",
     )
 
 
@@ -47,3 +52,4 @@ class CopilotResponse(BaseModel):
     query_interpreted: QueryIntent
     candidates: list[Candidate]
     summary: str
+    conversation_context_used: bool = False
