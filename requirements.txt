@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 fastapi==0.115.0
 uvicorn[standard]==0.32.0
 pydantic==2.9.2
@@ -20,3 +21,16 @@ python-multipart>=0.0.9
 
 pytesseract
 pillow
+=======
+fastapi
+uvicorn[standard]
+langchain
+langchain-ollama
+ollama
+pydantic
+python-dotenv
+pandas
+numpy
+faiss-cpu
+sentence-transformers
+>>>>>>> 4aaf0ed6391c1d9c47c14a5c52b9571354780971

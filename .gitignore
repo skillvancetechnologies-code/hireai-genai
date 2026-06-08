@@ -1,19 +1,8 @@
-.env
 .venv/
-venv/
+.env
 __pycache__/
-*.pyc
-*.pyo
-.pytest_cache/
-.coverage
-data/cost_log.jsonl
-data/faiss/
-# PII: parser resumes + the parser eval set contain real names/emails.
-!data/eval_sets/parser_resumes/.gitkeep
-!data/eval_sets/parser_resumes/README.md
-*.pkl
-.DS_Store
-.idea/
-.vscode/
-.claude/
-ReadMe/
+*.pyc           
+
+
+
+    
