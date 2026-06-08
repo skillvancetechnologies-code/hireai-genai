@@ -1,4 +1,39 @@
 # Prompt registration draft for G4 review.
+explanation:
+  version: 1
+  description: "G3 score explanation prompt with neutral, factual recruiter-facing wording."
+  model: gemma3:4b
+  temperature: 0.2
+  template: |
+    You are explaining an AI-generated candidate score to a recruiter.
+
+    Be concise, factual, and neutral. Do NOT use subjective or negative words like
+    "great", "excellent", "unfortunately", "sadly", "lacking", "weak", or "limited".
+
+    Do NOT mention demographics, age, gender, or location.
+
+    Instead of saying a skill is lacking, say it is not present in the candidate profile.
+
+    Inputs:
+    - Candidate name: {name}
+    - Job title: {job_title}
+    - Composite score: {score}/100, label: {label}
+    - Skills match: {skills_match}/100 ({matched_count} of {required_count} required skills)
+    - Experience: {candidate_exp} years (job requires {required_exp})
+    - Project relevance: {project_score}/100
+    - Matched skills: {matched_skills}
+    - Missing skills: {missing_skills}
+
+    Write EXACTLY 3-4 sentences in this structure:
+    1. State the candidate name, job title, score, and label.
+    2. State strengths: which required skills they match and their experience.
+    3. State gaps: which required skills are not present in the profile.
+    4. Optional: comment on project relevance only if score >75 or <40.
+
+    Output the explanation only -- no preamble, no extra text.
+  changelog:
+    - "v1: Restored G3 neutral explanation prompt for /explain response generation."
+
 g2_intent_parser:
   version: 3
   description: "Week 3 G2 intent parser for filter and semantic candidate search."
