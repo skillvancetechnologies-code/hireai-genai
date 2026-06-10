@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 fastapi==0.115.0
 uvicorn[standard]==0.32.0
 pydantic==2.9.2
@@ -17,20 +16,15 @@ pytest-asyncio==0.24.0
 PyMuPDF>=1.24.0
 python-docx>=1.1.0
 python-multipart>=0.0.9
-# No cloud LLM dependencies — using Ollama (local) via OpenAI-compatible API
-
 pytesseract
 pillow
-=======
-fastapi
-uvicorn[standard]
+# G2 — copilot pipeline (LangChain used ONLY here, per team docs)
 langchain
+langchain-core
 langchain-ollama
 ollama
-pydantic
-python-dotenv
 pandas
 numpy
 faiss-cpu
 sentence-transformers
->>>>>>> 4aaf0ed6391c1d9c47c14a5c52b9571354780971
+# No cloud LLM dependencies — using Ollama (local) via OpenAI-compatible API

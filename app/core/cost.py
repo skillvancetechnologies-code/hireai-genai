@@ -20,6 +20,7 @@ _settings = get_settings()
 
 # Pricing in USD per 1M tokens (input, output).
 # Local Ollama models cost $0 — entries kept for cost log consistency.
+# Gemini fallback models are billed; these rates feed the $200 budget guard.
 PRICING: dict[str, tuple[float, float]] = {
     "gemma3:4b": (0.0, 0.0),
     "gemma3:12b": (0.0, 0.0),
@@ -27,6 +28,13 @@ PRICING: dict[str, tuple[float, float]] = {
     "llama3.2:3b": (0.0, 0.0),
     "llama3.1:8b": (0.0, 0.0),
     "mistral:7b": (0.0, 0.0),
+    "mistral:latest": (0.0, 0.0),
+    "qwen3.5:latest": (0.0, 0.0),
+    "zephyr:7b-beta": (0.0, 0.0),
+    # Gemini (fallback provider) — verify against current Google pricing
+    "gemini-2.5-flash": (0.30, 2.50),
+    "gemini-2.5-flash-lite": (0.10, 0.40),
+    "gemini-2.0-flash": (0.10, 0.40),
 }
 
 

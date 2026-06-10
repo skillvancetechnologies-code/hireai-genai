@@ -1,0 +1,47 @@
+{
+  "module": "copilot",
+  "accuracy": 0.967,
+  "count": 10,
+  "results": [
+    {
+      "id": "copilot_01",
+      "score": 1.0
+    },
+    {
+      "id": "copilot_02",
+      "score": 1.0
+    },
+    {
+      "id": "copilot_03",
+      "score": 1.0
+    },
+    {
+      "id": "copilot_04",
+      "score": 1.0
+    },
+    {
+      "id": "copilot_05",
+      "score": 0.667
+    },
+    {
+      "id": "copilot_06",
+      "score": 1.0
+    },
+    {
+      "id": "copilot_07",
+      "score": 1.0
+    },
+    {
+      "id": "copilot_08",
+      "score": 1.0
+    },
+    {
+      "id": "copilot_09",
+      "score": 1.0
+    },
+    {
+      "id": "copilot_10",
+      "score": 1.0
+    }
+  ]
+}

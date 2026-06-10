@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.core.dashboard import router as dashboard_router
 from app.modules.copilot.routes import router as copilot_router
 from app.modules.explain.routes import router as explain_router
 from app.modules.parser.routes import router as parser_router
@@ -21,3 +22,4 @@ def health_check() -> dict[str, str]:
 app.include_router(parser_router)
 app.include_router(copilot_router)
 app.include_router(explain_router)
+app.include_router(dashboard_router)

@@ -25,7 +25,7 @@ def test_all_routers_registered():
     routes = {r.path for r in app.routes}
     assert "/parse" in routes
     assert "/copilot" in routes
-    assert "/explain/" in routes
+    assert "/explain" in routes
 
 
 # ---- copilot endpoint --------------------------------------------------
