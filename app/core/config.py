@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     # Infra
     redis_url: str = "redis://localhost:6379/0"
     web_backend_url: str = "http://localhost:8000/api"
+    ml_score_base_url: str = ""
 
     # Service
     service_host: str = "0.0.0.0"

@@ -1,12 +1,14 @@
 from fastapi import FastAPI
 
 from app.modules.copilot.routes import router as copilot_router
+from app.modules.explain.routes import router as explain_router
+from app.modules.parser.routes import router as parser_router
 
 
 app = FastAPI(
-    title="G2 AI Copilot Engine",
-    description="Week 3 API for filter and semantic recruiter search.",
-    version="0.3.0",
+    title="HireAI GenAI Service",
+    description="Resume parsing, recruiter copilot, and explainable scoring APIs.",
+    version="0.4.0",
 )
 
 
@@ -16,4 +18,6 @@ def health_check() -> dict[str, str]:
     return {"status": "ok"}
 
 
+app.include_router(parser_router)
 app.include_router(copilot_router)
+app.include_router(explain_router)

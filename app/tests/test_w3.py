@@ -85,6 +85,29 @@ def test_explain_known_candidate(monkeypatch):
     assert len(body["explanation_text"]) > 0
     assert isinstance(body["top_strengths"], list)
     assert isinstance(body["top_gaps"], list)
+    assert "shap_values" in body
+    assert "top_positive_drivers" in body
+    assert "top_negative_drivers" in body
+    assert body["model_version"]
+
+
+def test_explain_returns_shap_values(monkeypatch):
+    """Week 4: SHAP values flow through the explain response for frontend rendering."""
+    monkeypatch.setattr(
+        "app.modules.explain.generator.llm_call",
+        lambda prompt, **kwargs: (
+            "Lakshmi Yang scores 54/100 for Data Scientist. "
+            "Matched skills include machine learning, SQL, and TensorFlow. "
+            "Python, pandas, and scikit-learn are not present in the candidate profile."
+        ),
+    )
+    resp = client.post("/explain/", json={"candidate_id": "1003", "job_id": "3"})
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["shap_values"]["raw_or_normalized"] == "raw"
+    assert len(body["shap_values"]["feature_names"]) == len(body["shap_values"]["values"])
+    assert body["top_positive_drivers"]
+    assert body["top_negative_drivers"]
 
 
 def test_explain_unknown_candidate_returns_not_found():
