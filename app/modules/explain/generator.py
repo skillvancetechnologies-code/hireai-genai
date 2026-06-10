@@ -4,9 +4,9 @@ from app.core.config import get_settings
 from app.core.llm import llm_call
 from app.core.prompts import load_prompt
 from app.modules.explain.mock_data import (
-    candidate_data,
     get_candidate_job_data,
-    job_data,
+    has_candidate,
+    has_job,
 )
 from app.modules.explain.shap_client import get_shap_explanation
 
@@ -59,7 +59,7 @@ def _fallback_shap_explanation(candidate: dict) -> dict:
 
 
 def generate_explanation(candidate_id: str, job_id: str) -> dict:
-    if candidate_id not in candidate_data:
+    if not has_candidate(candidate_id):
         return {
             "candidate_id": candidate_id,
             "job_id": job_id,
@@ -68,7 +68,7 @@ def generate_explanation(candidate_id: str, job_id: str) -> dict:
             "top_gaps": [],
         }
 
-    if job_id not in job_data:
+    if not has_job(job_id):
         return {
             "candidate_id": candidate_id,
             "job_id": job_id,
