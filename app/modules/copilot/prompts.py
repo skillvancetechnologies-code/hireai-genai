@@ -29,3 +29,26 @@ Output: {{"type":"semantic","job_id":null,"skills_required":[],"min_experience":
 
 Recruiter query: {query}
 """
+
+
+SUMMARY_PROMPT_TEMPLATE = """
+You are an AI recruiter assistant.
+
+Given the recruiter query and the top candidate profiles, write a concise
+2-3 sentence summary for a recruiter.
+
+Focus on:
+- key skills
+- experience level
+- project relevance
+- overall suitability for the query
+
+Do not list every candidate individually.
+Keep the tone professional and recruiter-friendly.
+
+Recruiter query:
+{query}
+
+Candidate profiles:
+{candidates}
+"""

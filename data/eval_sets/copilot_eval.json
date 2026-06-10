@@ -143,5 +143,191 @@
       "type": "semantic",
       "top_k": 10
     }
+  },
+  {
+    "query": "Top 8 frontend developers",
+    "expected_type": "filter",
+    "expected": {
+      "type": "filter",
+      "top_k": 8,
+      "free_text": "frontend"
+    }
+  },
+  {
+    "query": "Show applied React candidates",
+    "expected_type": "filter",
+    "expected": {
+      "type": "filter",
+      "skills_required": ["React"],
+      "status_filter": "Applied",
+      "top_k": 10
+    }
+  },
+  {
+    "query": "Top 5 candidates who built recommendation engine projects",
+    "expected_type": "semantic",
+    "expected": {
+      "type": "semantic",
+      "top_k": 5
+    },
+    "summary_expected": true
+  },
+  {
+    "query": "Candidates who worked on data pipeline systems",
+    "expected_type": "semantic",
+    "expected": {
+      "type": "semantic",
+      "top_k": 10
+    },
+    "summary_expected": true
+  },
+  {
+    "query": "Show only the shortlisted ones",
+    "expected_type": "filter",
+    "history": [
+      {
+        "query": "Show Python developers"
+      }
+    ],
+    "expected": {
+      "type": "filter",
+      "skills_required": ["Python"],
+      "status_filter": "Shortlisted",
+      "top_k": 10
+    },
+    "conversation_context_expected": true
+  },
+  {
+    "query": "Show shortlisted candidates",
+    "expected_type": "filter",
+    "history": [
+      {
+        "query": "Show React developers"
+      }
+    ],
+    "expected": {
+      "type": "filter",
+      "skills_required": ["React"],
+      "status_filter": "Shortlisted",
+      "top_k": 10
+    },
+    "conversation_context_expected": true
+  },
+  {
+    "query": "Show me his projects",
+    "expected_type": "semantic",
+    "history": [
+      {
+        "query": "Candidates similar to Priya who built fintech apps",
+        "candidates": [
+          {
+            "candidate_id": 1001,
+            "name": "Priya Chauhan",
+            "skills": ["python", "sql"],
+            "experience_years": 5,
+            "education": "b.tech computer science",
+            "projects": ["fintech dashboard", "ai chatbot"],
+            "job_id": 1,
+            "role": "Backend Engineer",
+            "status": "Shortlisted",
+            "score": 91.0,
+            "label": "Good Fit"
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "type": "semantic",
+      "top_k": 1
+    },
+    "conversation_context_expected": true,
+    "summary_expected": true
+  },
+  {
+    "query": "Show me the top candidate projects",
+    "expected_type": "semantic",
+    "history": [
+      {
+        "query": "Find candidates experienced in AI chatbot projects",
+        "candidates": [
+          {
+            "candidate_id": 1002,
+            "name": "Xiao Kumar",
+            "skills": ["python", "mlflow"],
+            "experience_years": 6,
+            "education": "m.tech data engineering",
+            "projects": ["ai chatbot", "automation platform"],
+            "job_id": 6,
+            "role": "Machine Learning Engineer",
+            "status": "Applied",
+            "score": 89.5,
+            "label": "Good Fit"
+          }
+        ]
+      }
+    ],
+    "expected": {
+      "type": "semantic",
+      "top_k": 1
+    },
+    "conversation_context_expected": true,
+    "summary_expected": true
+  },
+  {
+    "query": "People with projects in cloud migration automation",
+    "expected_type": "semantic",
+    "expected": {
+      "type": "semantic",
+      "top_k": 10
+    },
+    "summary_expected": true
+  },
+  {
+    "query": "Find people who built real-time analytics systems",
+    "expected_type": "semantic",
+    "expected": {
+      "type": "semantic",
+      "top_k": 10
+    },
+    "summary_expected": true
+  },
+  {
+    "query": "Top 3 developers experienced in chatbot automation",
+    "expected_type": "semantic",
+    "expected": {
+      "type": "semantic",
+      "top_k": 3
+    },
+    "summary_expected": true
+  },
+  {
+    "query": "Show Good Fit Docker candidates with 4 years experience",
+    "expected_type": "filter",
+    "expected": {
+      "type": "filter",
+      "skills_required": ["Docker"],
+      "min_experience": 4,
+      "label_filter": "Good Fit",
+      "top_k": 10
+    },
+    "summary_expected": true
+  },
+  {
+    "query": "Show candidates for JOB8",
+    "expected_type": "filter",
+    "expected": {
+      "type": "filter",
+      "job_id": 8,
+      "top_k": 10
+    }
+  },
+  {
+    "query": "Top 2 mobile developers",
+    "expected_type": "filter",
+    "expected": {
+      "type": "filter",
+      "top_k": 2,
+      "free_text": "mobile"
+    }
   }
 ]

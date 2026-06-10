@@ -1,9 +1,10 @@
 from fastapi import APIRouter, HTTPException, status
 
-from app.models.schemas import CopilotRequest, CopilotResponse
+from app.modules.copilot.context import ContextResolutionError
 from app.modules.copilot.intent import IntentParseError
 from app.modules.copilot.pipeline import run_copilot
 from app.modules.copilot.retriever import SemanticSearchError, build_faiss_index
+from app.modules.copilot.schemas import CopilotRequest, CopilotResponse
 from app.services.dataset_loader import DatasetValidationError
 
 
@@ -14,7 +15,12 @@ router = APIRouter(tags=["copilot"])
 def copilot(request: CopilotRequest) -> CopilotResponse:
     """Route recruiter queries to structured filtering or semantic FAISS search."""
     try:
-        response = run_copilot(request.query)
+        response = run_copilot(request.query, request.history)
+    except ContextResolutionError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc
     except IntentParseError as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
