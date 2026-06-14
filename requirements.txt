@@ -16,7 +16,15 @@ pytest-asyncio==0.24.0
 PyMuPDF>=1.24.0
 python-docx>=1.1.0
 python-multipart>=0.0.9
-# No cloud LLM dependencies — using Ollama (local) via OpenAI-compatible API
-
 pytesseract
 pillow
+# G2 — copilot pipeline (LangChain used ONLY here, per team docs)
+langchain
+langchain-core
+langchain-ollama
+ollama
+pandas
+numpy
+faiss-cpu
+sentence-transformers
+# No cloud LLM dependencies — using Ollama (local) via OpenAI-compatible API

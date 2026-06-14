@@ -1,57 +1,74 @@
-import csv
-from pathlib import Path
+"""Candidate/job lookup tables for the explain module.
+
+Built from the shared cleaned datasets in app/data via
+app.services.dataset_loader, so G2 and G3 read the same source of truth.
+The tables refresh automatically when the underlying CSVs change.
+"""
+
+import pandas as pd
+
+from app.services.dataset_loader import (
+    DatasetValidationError,
+    get_candidate_search_data,
+    get_candidates_data,
+    get_dataset_version,
+    get_jobs_data,
+)
 
 
-BASE_DIR = Path(__file__).resolve().parents[3]
-DATA_DIR = BASE_DIR / "data"
-
-CANDIDATES_PATH = DATA_DIR / "candidates.csv"
-JOBS_PATH = DATA_DIR / "jobs.csv"
-SCORES_PATH = DATA_DIR / "scores.csv"
-APPLICATIONS_PATH = DATA_DIR / "applications.csv"
-
-candidate_data = {}
-job_data = {}
-candidate_job_data = {}
+_candidate_data: dict[str, dict] = {}
+_job_data: dict[str, dict] = {}
+_candidate_job_data: dict[tuple[str, str], dict] = {}
+_loaded_version: tuple | None = None
 
 
-def _read_csv(path: Path) -> list[dict]:
-    with path.open(newline="", encoding="utf-8") as file:
-        return list(csv.DictReader(file))
+def has_candidate(candidate_id: str) -> bool:
+    _ensure_loaded()
+    return str(candidate_id) in _candidate_data
 
 
-def _split_pipe(value: str | None) -> list[str]:
-    if not value:
-        return []
-    return [item.strip() for item in value.split("|") if item.strip()]
+def has_job(job_id: str) -> bool:
+    _ensure_loaded()
+    return str(job_id) in _job_data
 
 
-def _format_list(values: list[str]) -> str:
-    return ", ".join(values) if values else "None"
+def get_candidate_job_data(candidate_id: str, job_id: str) -> dict | None:
+    _ensure_loaded()
+    return _candidate_job_data.get((str(candidate_id), str(job_id)))
 
 
-def _to_float(value, default: float = 0.0) -> float:
+def _ensure_loaded() -> None:
+    global _loaded_version
+    version = get_dataset_version()
+    if version == _loaded_version:
+        return
+
     try:
-        return float(value)
-    except (TypeError, ValueError):
-        return default
+        candidates, jobs, pairs = _build_lookups()
+    except DatasetValidationError as exc:
+        print(f"WARNING: explain data unavailable: {exc}")
+        candidates, jobs, pairs = {}, {}, {}
+
+    _candidate_data.clear()
+    _candidate_data.update(candidates)
+    _job_data.clear()
+    _job_data.update(jobs)
+    _candidate_job_data.clear()
+    _candidate_job_data.update(pairs)
+    _loaded_version = version
 
 
-def _title(value, fallback: str) -> str:
-    clean_value = str(value or "").strip()
-    return clean_value.title() if clean_value else fallback
-
-
-def _load_real_data() -> None:
+def _build_lookups() -> tuple[dict, dict, dict]:
     candidates = {
         str(row["candidate_id"]).strip(): {
             "candidate_id": str(row["candidate_id"]).strip(),
             "name": _title(row.get("name"), "Candidate"),
             "skills": _split_pipe(row.get("skills")),
+            "education": _clean_str(row.get("education")),
             "experience_years": _to_float(row.get("experience_years")),
             "projects": _split_pipe(row.get("projects")),
         }
-        for row in _read_csv(CANDIDATES_PATH)
+        for row in get_candidates_data().to_dict("records")
     }
 
     jobs = {
@@ -59,22 +76,16 @@ def _load_real_data() -> None:
             "job_id": str(row["job_id"]).strip(),
             "job_title": _title(row.get("role"), "Job"),
             "required_skills": _split_pipe(row.get("required_skills")),
+            "role": _clean_str(row.get("role")),
             "min_experience": _to_float(row.get("min_experience")),
         }
-        for row in _read_csv(JOBS_PATH)
+        for row in get_jobs_data().to_dict("records")
     }
 
-    applications = {
-        (str(row["candidate_id"]).strip(), str(row["job_id"]).strip()): row
-        for row in _read_csv(APPLICATIONS_PATH)
-    }
-
-    candidate_data.update(candidates)
-    job_data.update(jobs)
-
-    for score_row in _read_csv(SCORES_PATH):
-        cid = str(score_row["candidate_id"]).strip()
-        jid = str(score_row["job_id"]).strip()
+    pairs = {}
+    for row in get_candidate_search_data().to_dict("records"):
+        cid = str(row["candidate_id"]).strip()
+        jid = str(row["job_id"]).strip()
         candidate = candidates.get(cid)
         job = jobs.get(jid)
         if not candidate or not job:
@@ -91,36 +102,62 @@ def _load_real_data() -> None:
             skill for skill in required_skills
             if skill.lower() not in candidate_skills_lower
         ]
-        application = applications.get((cid, jid), {})
 
-        candidate_job_data[(cid, jid)] = {
+        pairs[(cid, jid)] = {
             "candidate_id": cid,
             "job_id": jid,
             "name": candidate["name"],
             "job_title": job["job_title"],
-            "score": _to_float(score_row.get("score")),
-            "label": _title(score_row.get("label"), "Unknown Fit"),
-            "skills_match": _to_float(score_row.get("skills_match")),
+            "education": candidate["education"],
+            "skills": _format_list(candidate_skills),
+            "projects": _format_list(candidate["projects"]),
+            "role": job["role"],
+            "required_skills": _format_list(required_skills),
+            "score": _to_float(row.get("score")),
+            "label": _title(row.get("label"), "Unknown Fit"),
+            "skills_match": _to_float(row.get("skills_match")),
+            "experience_score": _to_float(row.get("experience_score")),
             "matched_count": len(matched_skills),
             "required_count": len(required_skills),
+            "num_candidate_skills": len(candidate_skills),
+            "num_required_skills": len(required_skills),
             "matched_skills": _format_list(matched_skills),
             "missing_skills": _format_list(missing_skills),
             "candidate_exp": candidate["experience_years"],
             "required_exp": job["min_experience"],
-            "project_score": _to_float(score_row.get("project_score")),
-            "application_status": application.get("status", "unknown"),
-            "application_date": application.get("application_date", "unknown"),
+            "project_score": _to_float(row.get("project_score")),
+            "application_status": _clean_str(row.get("status")) or "unknown",
+            "application_date": _clean_str(row.get("application_date")) or "unknown",
         }
 
-
-def get_candidate_job_data(candidate_id: str, job_id: str) -> dict | None:
-    return candidate_job_data.get((str(candidate_id), str(job_id)))
+    return candidates, jobs, pairs
 
 
-try:
-    _load_real_data()
-except FileNotFoundError as exc:
-    print(f"WARNING: required data file not found: {exc.filename}")
-    candidate_data.clear()
-    job_data.clear()
-    candidate_job_data.clear()
+def _clean_str(value) -> str:
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return ""
+    return str(value).strip()
+
+
+def _split_pipe(value) -> list[str]:
+    cleaned = _clean_str(value)
+    if not cleaned:
+        return []
+    return [item.strip() for item in cleaned.split("|") if item.strip()]
+
+
+def _format_list(values: list[str]) -> str:
+    return ", ".join(values) if values else "None"
+
+
+def _to_float(value, default: float = 0.0) -> float:
+    try:
+        result = float(value)
+    except (TypeError, ValueError):
+        return default
+    return default if pd.isna(result) else result
+
+
+def _title(value, fallback: str) -> str:
+    clean_value = _clean_str(value)
+    return clean_value.title() if clean_value else fallback

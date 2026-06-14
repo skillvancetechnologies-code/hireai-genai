@@ -1,9 +1,131 @@
-# Prompt registration draft for G4 review.
-g2_intent_parser:
+# HireAI GenAI — canonical prompt library (G4 owns).
+#
+# Every prompt in the system lives here. Each entry has:
+#   version, description, model, temperature, template, changelog
+#   (+ json_mode: true where the call uses JSON mode).
+#
+# Rules (enforced in PR review by G4):
+#   - Changing a template requires a version bump + changelog entry.
+#   - Templates are rendered with str.format() — literal braces in JSON
+#     examples must be escaped as {{ }}.
+#   - Model tags must be installed Ollama models (see ReadME/CLAUDE.md).
+
+# ---------------------------------------------------------------- G1 parser
+
+parser_main:
   version: 3
-  description: "Week 3 G2 intent parser for filter and semantic candidate search."
-  model: gemma3:latest
+  description: "Main resume parsing prompt with JSON output."
+  model: gemma3:4b
   temperature: 0.1
+  json_mode: true
+  template: |
+    You are a recruitment data extraction system. Read the resume below
+    and extract structured fields. Return ONLY valid JSON matching this exact schema:
+
+    {{
+      "name": "string",
+      "email": "string",
+      "phone": "string or null",
+      "skills": ["array of strings, technical skills only, no soft skills"],
+      "experience_years": <number, total years of professional experience>,
+      "education": "highest degree + institution, e.g. 'B.Tech, IIT Madras'",
+      "projects": ["array of project titles, max 5"],
+      "summary": "1-2 sentences on what this candidate's strengths are",
+      "parse_confidence": <float 0-1, how confident you are the resume is well-formed>
+    }}
+
+    Rules:
+    - If experience years are not explicitly stated, infer from earliest job date.
+    - Normalize skills: 'React.js' -> 'React', 'Postgres' -> 'PostgreSQL'.
+    - DO NOT INCLUDE soft skills like 'teamwork' or 'leadership' in the skills array.
+    - If the email is missing or malformed, return parse_confidence < 0.5.
+    - Output JSON only. No markdown, no explanation.
+
+    Resume:
+    ```
+    {resume_text}
+    ```
+  changelog:
+    - "v1: initial extraction prompt"
+    - "v2: added skill normalization rules + soft-skill exclusion"
+    - "v3: lowered temperature to 0.1, locked output schema for Ollama gemma3:4b"
+
+parser_retry_fix:
+  version: 1
+  description: "Retry wrapper used when the parser LLM returns malformed JSON; feeds the error back."
+  model: gemma3:4b
+  temperature: 0.1
+  json_mode: true
+  template: |
+    Your previous output was invalid JSON. Error: {error}
+
+    Try again. Return ONLY valid JSON — no markdown, no explanation:
+
+    {original_prompt}
+  changelog:
+    - "v1: extracted inline retry prompt from app/modules/parser/service.py into the library"
+
+parser_card_summary:
+  version: 1
+  description: "1-2 sentence 'why this candidate matches' snippet shown on candidate cards."
+  model: gemma3:4b
+  temperature: 0.2
+  template: |
+    Write a 1-2 sentence factual summary of why this candidate is interesting
+    for the given role. Mention concrete skills and years of experience only.
+    No subjective adjectives ('great', 'impressive'). No demographics.
+
+    Candidate skills: {skills}
+    Experience: {experience_years} years
+    Education: {education}
+    Projects: {projects}
+    Target role: {role}
+
+    Output the summary only — no preamble.
+  changelog:
+    - "v1: card summary prompt registered for G1 Week 4 candidate-card field"
+
+# --------------------------------------------------------------- G2 copilot
+
+intent_classifier:
+  version: 2
+  description: "Starter intent classifier: recruiter query -> structured filter spec (doc 5.2 shape)."
+  model: gemma3:4b
+  temperature: 0.1
+  json_mode: true
+  template: |
+    Convert this recruiter query into a structured search.
+    Return ONLY a JSON object with this schema:
+    {{
+      "type": "filter" | "semantic",
+      "job_id": "string or null",
+      "skills_required": ["array of skill names"],
+      "min_experience": <number or null>,
+      "label_filter": "Good Fit" | "Average Fit" | "Poor Fit" | null,
+      "status_filter": "Applied" | "Shortlisted" | "Interviewed" | "Hired" | "Rejected" | null,
+      "top_k": <integer, default 10>,
+      "free_text": "<the query without the filters extracted, if anything remains>"
+    }}
+
+    Examples:
+    Query: "Show top 5 Python developers for JOB0012"
+    Output: {{"type":"filter","job_id":"JOB0012","skills_required":["Python"],"min_experience":null,"label_filter":null,"status_filter":null,"top_k":5,"free_text":""}}
+
+    Query: "Candidates similar to Priya who built fintech apps"
+    Output: {{"type":"semantic","job_id":null,"skills_required":[],"min_experience":null,"label_filter":null,"status_filter":null,"top_k":10,"free_text":"similar to Priya, built fintech apps"}}
+
+    Query: "{query}"
+    Output:
+  changelog:
+    - "v1: initial intent classifier from team docs section 5.2"
+    - "v2: adapted to Ollama gemma3:4b with JSON mode"
+
+g2_intent_parser:
+  version: 5
+  description: "Week 4 G2 intent parser for filter, semantic, and history-aware candidate search."
+  model: gemma3:4b
+  temperature: 0.1
+  json_mode: true
   template: |
     Convert this recruiter query into a structured candidate search.
 
@@ -12,7 +134,7 @@ g2_intent_parser:
     - "semantic": natural-language similarity or project/background searches.
 
     Return ONLY valid JSON with this schema:
-    {
+    {{
       "type": "filter" | "semantic",
       "job_id": <integer or null>,
       "skills_required": ["skill names"],
@@ -21,17 +143,284 @@ g2_intent_parser:
       "status_filter": "Applied" | "Shortlisted" | "Interviewed" | "Hired" | "Rejected" | null,
       "top_k": <integer, default 10>,
       "free_text": "<semantic search text or remaining meaningful role/keyword text>"
-    }
+    }}
 
     Examples:
     Query: "Show top 5 Good Fit Python developers"
-    Output: {"type":"filter","job_id":null,"skills_required":["Python"],"min_experience":null,"label_filter":"Good Fit","status_filter":null,"top_k":5,"free_text":""}
+    Output: {{"type":"filter","job_id":null,"skills_required":["Python"],"min_experience":null,"label_filter":"Good Fit","status_filter":null,"top_k":5,"free_text":""}}
+
+    Query: "Show shortlisted Python developers with 2 years experience"
+    Output: {{"type":"filter","job_id":null,"skills_required":["Python"],"min_experience":2,"label_filter":null,"status_filter":"Shortlisted","top_k":10,"free_text":""}}
 
     Query: "Candidates similar to Priya who built fintech apps"
-    Output: {"type":"semantic","job_id":null,"skills_required":[],"min_experience":null,"label_filter":null,"status_filter":null,"top_k":10,"free_text":"Candidates similar to Priya who built fintech apps"}
+    Output: {{"type":"semantic","job_id":null,"skills_required":[],"min_experience":null,"label_filter":null,"status_filter":null,"top_k":10,"free_text":"Candidates similar to Priya who built fintech apps"}}
 
     Query: "{query}"
   changelog:
     - "v1: Week 1 prompt extracted job_id and top_k for one hardcoded query flow."
     - "v2: Added skill, experience, label, and status filters for Week 2 dataset-backed retrieval."
     - "v3: Added filter vs semantic query classification for FAISS-backed Week 3 retrieval."
+    - "v4: Parser can be used with resolved conversation context for Week 4 follow-up queries."
+    - "v5: Escaped JSON braces so the library template renders; fixed model tag to installed gemma3:4b."
+
+g2_candidate_summary:
+  version: 2
+  description: "Week 4 recruiter-friendly candidate summary generator."
+  model: gemma3:4b
+  temperature: 0.1
+  template: |
+    You are an AI recruiter assistant.
+
+    Given the recruiter query and the top candidate profiles, write a concise
+    2-3 sentence summary for a recruiter.
+
+    Focus on:
+    - key skills
+    - experience level
+    - project relevance
+    - overall suitability for the query
+
+    Do not list every candidate individually.
+    Keep the tone professional and recruiter-friendly.
+
+    Recruiter query:
+    {query}
+
+    Candidate profiles:
+    {candidates}
+  changelog:
+    - "v1: Added Week 4 LLM summary generation prompt for top candidate result sets."
+    - "v2: Fixed model tag to installed gemma3:4b (gemma3:latest is not pulled on team machines)."
+
+g2_followup_resolver:
+  version: 1
+  description: "Rewrites a follow-up query ('show me his projects') into a standalone query using the last 5 turns."
+  model: gemma3:4b
+  temperature: 0.1
+  json_mode: true
+  template: |
+    A recruiter is in a multi-turn conversation. Rewrite their follow-up query
+    into a fully standalone query by resolving pronouns and references using
+    the conversation history.
+
+    Return ONLY valid JSON:
+    {{
+      "resolved_query": "<standalone query>",
+      "referenced_candidate": "<candidate name or null>"
+    }}
+
+    Conversation history (most recent last):
+    {history}
+
+    Follow-up query: "{query}"
+  changelog:
+    - "v1: LLM-based follow-up resolution registered as backup for the heuristic resolver in context.py"
+
+g2_comparison_summary:
+  version: 1
+  description: "Flagship query #3: compare the top candidates for a role in 3-4 factual sentences."
+  model: gemma3:4b
+  temperature: 0.2
+  template: |
+    Compare the following candidates for the role of {role}.
+
+    Write 3-4 factual sentences: one sentence per candidate covering their
+    matched skills and experience, then one closing sentence on how they
+    differ. No subjective adjectives. No demographics. No ranking words
+    like 'best' — describe trade-offs only.
+
+    Candidates:
+    {candidates}
+  changelog:
+    - "v1: comparison summary prompt for flagship demo query 'Compare top 3 candidates for the ML Engineer role'"
+
+g2_skill_gap_analysis:
+  version: 1
+  description: "Flagship query #5: which roles have the biggest skill gap across the candidate pool."
+  model: gemma3:4b
+  temperature: 0.2
+  template: |
+    You are analyzing recruitment pipeline data.
+
+    For each job below you are given its required skills and how often each
+    skill appears across the candidate pool. Identify the 2-3 roles with the
+    largest skill gaps (required skills that few or no candidates have).
+
+    Write 2-3 factual sentences naming the roles and the specific missing
+    skills. No subjective language.
+
+    Jobs and skill coverage:
+    {jobs_with_coverage}
+  changelog:
+    - "v1: skill-gap analysis prompt for flagship demo query 'Which roles have the biggest skill gap right now?'"
+
+# --------------------------------------------------------------- G3 explain
+
+explanation:
+  version: 1
+  description: "G3 score explanation prompt with neutral, factual recruiter-facing wording."
+  model: gemma3:4b
+  temperature: 0.2
+  template: |
+    You are explaining an AI-generated candidate score to a recruiter.
+
+    Be concise, factual, and neutral. Do NOT use subjective or negative words like
+    "great", "excellent", "unfortunately", "sadly", "lacking", "weak", or "limited".
+
+    Do NOT mention demographics, age, gender, or location.
+
+    Instead of saying a skill is lacking, say it is not present in the candidate profile.
+
+    Inputs:
+    - Candidate name: {name}
+    - Job title: {job_title}
+    - Composite score: {score}/100, label: {label}
+    - Skills match: {skills_match}/100 ({matched_count} of {required_count} required skills)
+    - Experience: {candidate_exp} years (job requires {required_exp})
+    - Project relevance: {project_score}/100
+    - Matched skills: {matched_skills}
+    - Missing skills: {missing_skills}
+
+    Write EXACTLY 3-4 sentences in this structure:
+    1. State the candidate name, job title, score, and label.
+    2. State strengths: which required skills they match and their experience.
+    3. State gaps: which required skills are not present in the profile.
+    4. Optional: comment on project relevance only if score >75 or <40.
+
+    Output the explanation only -- no preamble, no extra text.
+  changelog:
+    - "v1: Restored G3 neutral explanation prompt for /explain response generation."
+
+explain_edge_perfect_fit:
+  version: 1
+  description: "Explanation variant for candidates with zero missing skills (Week 6 edge case)."
+  model: gemma3:4b
+  temperature: 0.2
+  template: |
+    You are explaining an AI-generated candidate score to a recruiter.
+    This candidate matches ALL required skills for the job.
+
+    Be concise, factual, and neutral. No subjective words. No demographics.
+
+    Inputs:
+    - Candidate name: {name}
+    - Job title: {job_title}
+    - Composite score: {score}/100, label: {label}
+    - Matched skills (all required): {matched_skills}
+    - Experience: {candidate_exp} years (job requires {required_exp})
+
+    Write EXACTLY 3 sentences:
+    1. State the candidate name, job title, score, and label.
+    2. State that all {required_count} required skills are present, naming the key ones.
+    3. Comment on experience relative to the requirement.
+
+    Output the explanation only — no preamble.
+  changelog:
+    - "v1: dedicated wording for the 0-missing-skills edge case so the gaps sentence is never fabricated"
+
+explain_edge_poor_fit:
+  version: 1
+  description: "Explanation variant for candidates missing all required skills (Week 6 edge case)."
+  model: gemma3:4b
+  temperature: 0.2
+  template: |
+    You are explaining an AI-generated candidate score to a recruiter.
+    This candidate matches NONE of the required skills for the job.
+
+    Be concise, factual, and neutral. No subjective or negative words
+    ('weak', 'poor', 'unfortunately'). No demographics.
+
+    Inputs:
+    - Candidate name: {name}
+    - Job title: {job_title}
+    - Composite score: {score}/100, label: {label}
+    - Required skills (none present in profile): {missing_skills}
+    - Candidate's actual skills: {candidate_skills}
+    - Experience: {candidate_exp} years (job requires {required_exp})
+
+    Write EXACTLY 3 sentences:
+    1. State the candidate name, job title, score, and label.
+    2. State that the required skills are not present in the profile, and name
+       the skills the candidate does have.
+    3. Comment on experience relative to the requirement.
+
+    Output the explanation only — no preamble.
+  changelog:
+    - "v1: dedicated wording for the all-skills-missing edge case to keep tone neutral"
+
+explain_edge_missing_data:
+  version: 1
+  description: "Explanation variant when project or experience data is unavailable (Week 6 edge case)."
+  model: gemma3:4b
+  temperature: 0.2
+  template: |
+    You are explaining an AI-generated candidate score to a recruiter.
+    Some candidate data is unavailable: {missing_fields}.
+
+    Be concise, factual, and neutral. Do not guess missing values — state
+    that the data was not provided. No subjective words. No demographics.
+
+    Inputs:
+    - Candidate name: {name}
+    - Job title: {job_title}
+    - Composite score: {score}/100, label: {label}
+    - Matched skills: {matched_skills}
+    - Missing skills: {missing_skills}
+
+    Write EXACTLY 3-4 sentences:
+    1. State the candidate name, job title, score, and label.
+    2. State strengths from the data that IS available.
+    3. State gaps from the data that IS available.
+    4. Note which inputs were unavailable and that the score reflects only the
+       available data.
+
+    Output the explanation only — no preamble.
+  changelog:
+    - "v1: missing-data edge case wording so the model never invents projects or experience"
+
+# ------------------------------------------------------------ G4 eval/guard
+
+eval_rubric_judge:
+  version: 1
+  description: "LLM judge that scores an explanation 1-3 on factual / clear / unbiased (G3 eval rubric)."
+  model: gemma3:4b
+  temperature: 0.0
+  json_mode: true
+  template: |
+    You are grading an AI-generated candidate score explanation against a rubric.
+
+    Score each dimension 1-3 (1=fail, 2=acceptable, 3=good):
+    - factual: every claim is supported by the provided inputs; nothing invented.
+    - clear: a recruiter can understand it in one read; 3-4 sentences.
+    - unbiased: no subjective adjectives, no demographics, neutral tone.
+
+    Return ONLY valid JSON:
+    {{"factual": <1-3>, "clear": <1-3>, "unbiased": <1-3>, "notes": "<one line>"}}
+
+    Inputs given to the explainer:
+    {inputs}
+
+    Explanation to grade:
+    {explanation}
+  changelog:
+    - "v1: rubric judge for the nightly explain eval (avg >= 2.5/3 target per team docs 9.1)"
+
+tone_guard:
+  version: 1
+  description: "Checks recruiter-facing text for subjective/bias terms before it is returned (G3 tone guide)."
+  model: gemma3:4b
+  temperature: 0.0
+  json_mode: true
+  template: |
+    Check the text below against these rules:
+    - No subjective adjectives ('great', 'excellent', 'impressive', 'weak', 'poor').
+    - No emotional words ('unfortunately', 'sadly', 'happily').
+    - No mention of demographics, age, gender, nationality, or location.
+
+    Return ONLY valid JSON:
+    {{"pass": true|false, "violations": ["list of offending words or phrases, empty if pass"]}}
+
+    Text:
+    {text}
+  changelog:
+    - "v1: automated tone-guide check used by the explain eval and available to G3 at runtime"

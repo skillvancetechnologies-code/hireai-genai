@@ -5,6 +5,11 @@ imports the openai SDK directly. This wrapper handles:
 
 - Redis caching keyed on (model, temperature, json_mode, prompt)
 - Exponential backoff retry (3 attempts, for Ollama cold-start delays)
+- Gemini fallback (team docs 8.3): if the primary model fails after all
+  retries, the same call is retried against Gemini Flash through Google's
+  OpenAI-compatible endpoint (requires GEMINI_API_KEY; no google.* SDK)
+- Local last-resort fallback: if Gemini is unconfigured or also fails,
+  the call is retried once against settings.fallback_model
 - JSON-mode handling
 - Per-call token + cost logging via app.core.cost
 
@@ -34,6 +39,22 @@ _client = OpenAI(
     api_key="ollama",
     base_url=_settings.ollama_base_url,
 )
+
+_gemini_client: Optional[OpenAI] = None
+
+
+def _get_gemini_client() -> Optional[OpenAI]:
+    """Lazy Gemini client via Google's OpenAI-compatible endpoint.
+    Returns None when GEMINI_API_KEY is not configured."""
+    global _gemini_client
+    if not _settings.gemini_api_key:
+        return None
+    if _gemini_client is None:
+        _gemini_client = OpenAI(
+            api_key=_settings.gemini_api_key,
+            base_url=_settings.gemini_base_url,
+        )
+    return _gemini_client
 
 
 def _build_cache_key(model: str, temperature: float, json_mode: bool, prompt: str) -> str:
@@ -66,6 +87,28 @@ def _call_ollama(model: str, prompt: str, temperature: float, json_mode: bool) -
     if json_mode:
         kwargs["response_format"] = {"type": "json_object"}
     resp = _client.chat.completions.create(**kwargs)
+    text = resp.choices[0].message.content or ""
+    usage = resp.usage
+    return text, getattr(usage, "prompt_tokens", 0), getattr(usage, "completion_tokens", 0)
+
+
+@retry(
+    stop=stop_after_attempt(2),
+    wait=wait_exponential(multiplier=1, min=1, max=4),
+    reraise=True,
+)
+def _call_gemini(prompt: str, temperature: float, json_mode: bool) -> tuple[str, int, int]:
+    client = _get_gemini_client()
+    if client is None:
+        raise LLMError("GEMINI_API_KEY not configured")
+    kwargs = {
+        "model": _settings.gemini_fallback_model,
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": temperature,
+    }
+    if json_mode:
+        kwargs["response_format"] = {"type": "json_object"}
+    resp = client.chat.completions.create(**kwargs)
     text = resp.choices[0].message.content or ""
     usage = resp.usage
     return text, getattr(usage, "prompt_tokens", 0), getattr(usage, "completion_tokens", 0)
@@ -116,13 +159,49 @@ def llm_call(
             f"project_total ${spent:.4f} >= cap ${cap:.2f}; refusing LLM call"
         )
 
+    used_model = model
+    result = None
+    errors: list[str] = []
     try:
-        text, p_tokens, c_tokens = _call_ollama(model, prompt, temperature, json_mode)
+        result = _call_ollama(model, prompt, temperature, json_mode)
     except Exception as e:
-        log.exception("Ollama call failed after retries: %s", e)
-        raise LLMError(str(e)) from e
+        errors.append(f"primary {model}: {e}")
 
-    log_call(model=model, module=module, prompt_tokens=p_tokens, completion_tokens=c_tokens)
+        # 1) Gemini fallback (team docs 8.3) — only when a key is configured.
+        if _settings.fallback_enabled and _settings.gemini_api_key:
+            gemini_model = _settings.gemini_fallback_model
+            log.warning(
+                "Primary model %s failed after retries (%s) — falling back to Gemini (%s)",
+                model, e, gemini_model,
+            )
+            try:
+                result = _call_gemini(prompt, temperature, json_mode)
+                used_model = gemini_model
+            except Exception as ge:
+                errors.append(f"gemini {gemini_model}: {ge}")
+                log.warning("Gemini fallback failed: %s", ge)
+
+        # 2) Local last-resort fallback (keeps offline dev working).
+        local_fb = _settings.fallback_model
+        if (
+            result is None
+            and _settings.fallback_enabled
+            and local_fb
+            and local_fb != model
+        ):
+            log.warning("Falling back to local model %s", local_fb)
+            try:
+                result = _call_ollama(local_fb, prompt, temperature, json_mode)
+                used_model = local_fb
+            except Exception as le:
+                errors.append(f"local fallback {local_fb}: {le}")
+
+        if result is None:
+            log.error("All LLM backends failed: %s", "; ".join(errors))
+            raise LLMError("; ".join(errors)) from e
+
+    text, p_tokens, c_tokens = result
+    log_call(model=used_model, module=module, prompt_tokens=p_tokens, completion_tokens=c_tokens)
 
     if cache:
         cache_set(key, text, ttl=ttl)

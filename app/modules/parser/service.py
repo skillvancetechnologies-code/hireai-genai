@@ -61,10 +61,8 @@ def _call_with_retry(initial_prompt: str, *, model: str, temperature: float) -> 
             last_error = str(exc)
             if "invalid JSON" in last_error and attempt < 2:
                 log.warning("Parser attempt %d: malformed JSON — retrying with error feedback", attempt + 1)
-                prompt = (
-                    f"Your previous output was invalid JSON. Error: {last_error}\n\n"
-                    f"Try again. Return ONLY valid JSON — no markdown, no explanation:\n\n"
-                    f"{initial_prompt}"
+                prompt = load_prompt("parser_retry_fix").format(
+                    error=last_error, original_prompt=initial_prompt
                 )
             else:
                 raise

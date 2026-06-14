@@ -14,9 +14,22 @@ class Settings(BaseSettings):
     copilot_model: str = "gemma3:4b"
     explain_model: str = "gemma3:4b"
 
+    # Gemini fallback (team docs 8.3): if the primary Ollama model fails
+    # after retries, retry the same call against Gemini Flash via Google's
+    # OpenAI-compatible endpoint. Requires GEMINI_API_KEY in .env.
+    gemini_api_key: str = ""
+    gemini_fallback_model: str = "gemini-2.5-flash"
+    gemini_base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai/"
+
+    # Local last-resort fallback (used when GEMINI_API_KEY is unset or
+    # Gemini also fails) so offline dev keeps working.
+    fallback_model: str = "mistral:latest"
+    fallback_enabled: bool = True
+
     # Infra
     redis_url: str = "redis://localhost:6379/0"
     web_backend_url: str = "http://localhost:8000/api"
+    ml_score_base_url: str = ""
 
     # Service
     service_host: str = "0.0.0.0"

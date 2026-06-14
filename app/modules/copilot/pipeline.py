@@ -1,22 +1,34 @@
 from app.models.schemas import CopilotResponse, QueryIntent
+from app.modules.copilot.context import resolve_context
 from app.modules.copilot.intent import parse_query
 from app.modules.copilot.retriever import semantic_search
+from app.modules.copilot.summary import generate_candidate_summary
 from app.services.candidate_service import get_candidates
 
 
-def run_copilot(query: str) -> CopilotResponse:
+def run_copilot(query: str, history: list[dict] | None = None) -> CopilotResponse:
     """Parse a recruiter query and route it to filter or semantic search."""
-    intent = parse_query(query)
+    context = resolve_context(query, history)
 
-    if intent.type == "semantic":
-        candidates = semantic_search(intent.free_text or query, intent.top_k)
+    if context.direct_candidates:
+        candidates = context.direct_candidates
+        intent = QueryIntent(type="semantic", top_k=len(candidates), free_text=context.query)
     else:
-        candidates = get_candidates(intent)
+        intent = parse_query(context.query)
+
+        if intent.type == "semantic":
+            candidates = semantic_search(intent.free_text or context.query, intent.top_k)
+        else:
+            candidates = get_candidates(intent)
+
+    if context.focus_top_candidate:
+        candidates = candidates[:1]
 
     return CopilotResponse(
         query_interpreted=intent,
         candidates=candidates,
-        summary=_build_summary(intent, len(candidates)),
+        summary=generate_candidate_summary(candidates, query),
+        conversation_context_used=context.context_used,
     )
 
 

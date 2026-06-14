@@ -2,7 +2,9 @@
 .env
 __pycache__/
 *.pyc           
-
+.claude/
+.ReadME/
+.cost_log.jsonl
 
 
     
