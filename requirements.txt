@@ -28,3 +28,6 @@ numpy
 faiss-cpu
 sentence-transformers
 # No cloud LLM dependencies — using Ollama (local) via OpenAI-compatible API
+
+pytesseract
+pillow
