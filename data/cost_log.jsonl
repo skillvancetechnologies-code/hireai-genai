@@ -273,3 +273,17 @@
 {"timestamp": "2026-06-10T08:33:55.692301+00:00", "model": "gemma3:4b", "module": "explain", "prompt_tokens": 307, "completion_tokens": 95, "cost_usd": 0.0, "cache_hit": false}
 {"timestamp": "2026-06-10T08:34:20.055635+00:00", "model": "gemma3:4b", "module": "explain", "prompt_tokens": 302, "completion_tokens": 100, "cost_usd": 0.0, "cache_hit": false}
 {"timestamp": "2026-06-10T08:34:37.007419+00:00", "model": "gemma3:4b", "module": "explain", "prompt_tokens": 305, "completion_tokens": 98, "cost_usd": 0.0, "cache_hit": false}
+{"timestamp": "2026-06-14T15:14:59.821424+00:00", "model": "gemma3:4b", "module": "test", "prompt_tokens": 5, "completion_tokens": 2, "cost_usd": 0.0, "cache_hit": false}
+{"timestamp": "2026-06-14T15:15:07.854041+00:00", "model": "gemma3:4b", "module": "test", "prompt_tokens": 0, "completion_tokens": 0, "cost_usd": 0.0, "cache_hit": true}
+{"timestamp": "2026-06-14T15:15:07.889508+00:00", "model": "gemma3:4b", "module": "test", "prompt_tokens": 1, "completion_tokens": 1, "cost_usd": 0.0, "cache_hit": false}
+{"timestamp": "2026-06-14T15:15:07.918498+00:00", "model": "gemma3:4b", "module": "test", "prompt_tokens": 1, "completion_tokens": 1, "cost_usd": 0.0, "cache_hit": false}
+{"timestamp": "2026-06-14T15:15:07.950501+00:00", "model": "gemma3:4b", "module": "test", "prompt_tokens": 4, "completion_tokens": 2, "cost_usd": 0.0, "cache_hit": false}
+{"timestamp": "2026-06-14T15:15:07.985856+00:00", "model": "gemma3:4b", "module": "test", "prompt_tokens": 1, "completion_tokens": 1, "cost_usd": 0.0, "cache_hit": false}
+{"timestamp": "2026-06-14T15:15:16.066549+00:00", "model": "gemma3:4b", "module": "explain", "prompt_tokens": 1, "completion_tokens": 1, "cost_usd": 0.0, "cache_hit": false}
+{"timestamp": "2026-06-14T15:15:24.116161+00:00", "model": "gemma3:4b", "module": "explain", "prompt_tokens": 0, "completion_tokens": 0, "cost_usd": 0.0, "cache_hit": true}
+{"timestamp": "2026-06-14T15:15:32.434902+00:00", "model": "gemma3:4b", "module": "test", "prompt_tokens": 0, "completion_tokens": 0, "cost_usd": 0.0, "cache_hit": true}
+{"timestamp": "2026-06-14T15:15:37.198362+00:00", "model": "gemini-2.5-flash", "module": "test", "prompt_tokens": 5, "completion_tokens": 2, "cost_usd": 6e-06, "cache_hit": false}
+{"timestamp": "2026-06-14T15:15:37.239361+00:00", "model": "mistral:latest", "module": "test", "prompt_tokens": 5, "completion_tokens": 2, "cost_usd": 0.0, "cache_hit": false}
+{"timestamp": "2026-06-14T15:15:37.284916+00:00", "model": "mistral:latest", "module": "test", "prompt_tokens": 1, "completion_tokens": 1, "cost_usd": 0.0, "cache_hit": false}
+{"timestamp": "2026-06-14T15:15:45.373680+00:00", "model": "gemini-2.5-flash", "module": "test", "prompt_tokens": 1, "completion_tokens": 1, "cost_usd": 3e-06, "cache_hit": false}
+{"timestamp": "2026-06-14T15:15:53.418491+00:00", "model": "gemma3:4b", "module": "test", "prompt_tokens": 0, "completion_tokens": 0, "cost_usd": 0.0, "cache_hit": true}
