@@ -6,5 +6,6 @@ __pycache__/
 .ReadME/
 .cost_log.jsonl
 
-
-    
+# Real-PII resume PDFs for the parser eval set — must never be committed.
+# G1 drops these locally; the runner cleanly skips if the folder is empty.
+data/eval_sets/parser_resumes/*.pdf

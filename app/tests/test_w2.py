@@ -16,7 +16,10 @@ from app.core.eval import detect_regression, field_accuracy, run_eval
 
 def test_parser_json_canonical_shape():
     cases = json.loads(Path("data/eval_sets/parser.json").read_text())
-    assert len(cases) == 10
+    # G1 expanded the gold set from the original 10 to 50 cases (W5/W6).
+    assert len(cases) == 50
+    ids = [c["id"] for c in cases]
+    assert len(set(ids)) == len(ids), "duplicate case ids in parser.json"
     for c in cases:
         assert set(c.keys()) >= {"id", "input", "expected"}
         # `input` is now a filename string, not a {resume_text:...} dict
