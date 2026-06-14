@@ -6,6 +6,9 @@ from __future__ import annotations
 
 import logging
 
+from pydantic import TypeAdapter, ValidationError
+from pydantic import EmailStr
+
 from app.core.llm import LLMError, llm_call_json
 from app.core.prompts import load_prompt
 from app.modules.parser.extract import extract_text
@@ -13,6 +16,24 @@ from app.modules.parser.normalize import normalize_skills
 from app.modules.parser.schemas import ParsedCandidate
 
 log = logging.getLogger(__name__)
+
+_EMAIL_ADAPTER = TypeAdapter(EmailStr)
+
+
+def _clean_email(value):
+    """Return a valid email or None.
+
+    The schema documents email as optional and 'returns null if missing or
+    malformed'. EmailStr would otherwise raise and crash the whole parse, so
+    we validate here and degrade to None when the LLM emits a malformed value
+    (e.g. stray spaces from OCR/garbled resumes)."""
+    if not value or not isinstance(value, str):
+        return None
+    try:
+        return _EMAIL_ADAPTER.validate_python(value.strip())
+    except ValidationError:
+        log.warning("Dropping malformed email from parsed resume: %r", value)
+        return None
 
 
 def parse_resume_file(file_path: str) -> dict:
@@ -41,6 +62,7 @@ def parse_resume_file(file_path: str) -> dict:
     data = _call_with_retry(rendered, model=prompt_spec.model, temperature=prompt_spec.temperature)
 
     data["skills"] = normalize_skills(data.get("skills") or [])
+    data["email"] = _clean_email(data.get("email"))
     data.setdefault("raw_text", raw_text)
     data.setdefault("projects", [])
     data.setdefault("phone", None)

@@ -1,57 +1,82 @@
 # G1 — Resume Parser Accuracy Report
 ## Week 5 & 6 Final Evaluation
 
+> Generated from a real run of `python scripts/run_evals.py --module parser`
+> on 2026-06-14 (model `gemma3:4b` via Ollama, Redis cache enabled).
+> Raw output: `data/eval_results/parser_latest.json`.
+
 ### Summary
 | Metric | Result |
 |---|---|
-| Total resumes tested | 50 |
-| Eval set cases | 50 |
-| Overall accuracy | 98% |
+| Eval cases scored | 50 |
+| Overall accuracy | **71.7%** |
 | Target accuracy | >90% |
-| Status | ✅ Target Met |
+| Status | ❌ **Target NOT met** |
+
+Scoring is field-level (`field_accuracy` in `app/core/eval.py`): each gold
+case grades `name, email, phone, skills, experience_years, education`. List
+fields use case-insensitive subset match; scalars use exact equality. The
+score is the fraction of those fields the parser got right, averaged over
+all cases.
 
 ### Accuracy Breakdown
-| Resume Type | Count | Accuracy |
+| Resume group | Count | Avg accuracy |
 |---|---|---|
-| Clean professional resumes | 32 | 100% |
-| Fresh graduate resumes | 10 | 100% |
-| Edge cases | 5 | 80% |
-| Messy/garbled formatting | 3 | 85% |
+| Real candidate resumes (case_01–32) | 32 | 62.5% |
+| Synthetic templated resumes (case_33–50) | 18 | 88.0% |
+| Perfect score (all fields correct) | 9 | — |
+| Scored ≥ 80% | 23 | — |
+| Scored < 50% | 4 | — |
 
-### Edge Cases Handled
+The headline 71.7% is inflated by the 18 clean, templated synthetic resumes
+(88%). On the 32 real-world resumes the parser scores **62.5%**, which is the
+more honest production estimate. Weakest cases: `case_13`, `case_20` (16.7%),
+`case_27`, `case_32` (33.3%) — mostly `education`/`experience_years`
+extraction errors and skill-set mismatches.
+
+### Edge Cases — measured behaviour
 | Case | Result |
 |---|---|
-| Missing email | ✅ Returns null gracefully |
-| Blank file | ✅ Returns 422 error |
-| Unsupported file type | ✅ Returns 415 error |
-| Image resume (JPG/PNG) | ✅ OCR working via Tesseract |
-| Garbled formatting | ✅ Returns low parse_confidence |
-| Malformed email | ✅ Pydantic validation catches it |
+| Missing email | ✅ Returns null |
+| Malformed email (e.g. stray space from OCR) | ✅ **Now** dropped to null — previously crashed the parse (fixed in `service.py`, `_clean_email`) |
+| Empty / no extractable text | ✅ Raises `ValueError` |
+| Image resume (JPG/PNG) | ⚠️ OCR path exists (pytesseract); not exercised by this eval set |
+| Garbled formatting (`case_23` MEDA KOWSHIK) | Partial extraction, score 0.5 |
+
+### Known accuracy gaps (real, from this run)
+- `education` is the most error-prone field — wrong institution or degree on
+  several real resumes.
+- `experience_years` frequently off by 1–2 years.
+- Skill extraction misses or over-normalizes on dense resumes.
+- Real resumes (62.5%) lag synthetic ones (88%) substantially — the gold set
+  should not be reported as a single blended number without this caveat.
 
 ### Latency
 | Scenario | Latency |
 |---|---|
-| Ollama local (development) | ~30-60s (CPU bound) |
-| Expected with OpenAI gpt-4o-mini | <3s |
-| Cache hit | <500ms |
+| Ollama `gemma3:4b` local (CPU) | ~30s per resume |
+| Cache hit (Redis) | <1s — full 50-case re-run completed in ~9.5s |
+| Gemini Flash fallback (production, if Ollama fails) | provider-dependent |
 
-### Demo Resumes
-1. **Mughal Arshad** — Senior AI/ML engineer with complex skills (Mughal Arshad - Resume.pdf)
-2. **Shaik Noor Zoya Mariam** — Fresh graduate resume (Resume_zoya.pdf)
-3. **Abhijit Girhepunje** — Senior full-stack developer 6 years experience (ABHIJIT GIRHEPUNJE.pdf)
-
-### Skill Normalization
-- 120+ canonical skill mappings in skill_map.yaml
-- Auto-normalizes: React.js → React, Postgres → PostgreSQL etc.
+> Note: this project uses Ollama (primary) → Gemini Flash (fallback). Earlier
+> versions of this report cited "OpenAI gpt-4o-mini"; that is not part of the
+> architecture and has been removed.
 
 ### File Support
-- ✅ PDF
-- ✅ DOCX
-- ✅ DOC
-- ✅ JPG/JPEG
-- ✅ PNG
+- ✅ PDF / DOCX / DOC
+- ⚠️ JPG / JPEG / PNG via Tesseract OCR — code path present, not covered by this eval
 
-### Known Limitations
-- Education field occasionally hallucinates institution name for minimal resumes
-- Latency is high with Ollama locally — will be <3s with OpenAI in production
-- Malformed emails cause validation error (handled gracefully)
+### Reproduce
+```bash
+docker start hireai-redis            # or: docker run -d --name hireai-redis -p 6379:6379 redis:7-alpine
+ollama serve                         # gemma3:4b must be pulled
+python scripts/run_evals.py --module parser
+cat data/eval_results/parser_latest.json
+```
+
+### Honest status vs. prior claim
+A previous version of this report claimed **98% on 50 resumes / target met**.
+That number was never produced by the eval runner — at the time it was
+written, the last actual run (`count: 10`) scored 63.3%, and the 50-case set
+had never been executed. This report replaces that claim with the real
+measured result: **71.7% overall (62.5% on real resumes), target not met.**
