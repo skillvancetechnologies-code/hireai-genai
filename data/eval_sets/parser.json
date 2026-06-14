@@ -6,7 +6,15 @@
       "name": "SHAIK NOOR ZOYA MARIAM",
       "email": "zmaryam7670@gmail.com",
       "phone": "+919493377404",
-      "skills": ["C", "Java", "Python", "MySQL", "Oracle", "PostgreSQL", "NLP"],
+      "skills": [
+        "C",
+        "Java",
+        "Python",
+        "MySQL",
+        "Oracle",
+        "PostgreSQL",
+        "NLP"
+      ],
       "experience_years": 0,
       "education": "B.Tech Computer Science Engineering, The Apollo University"
     }
@@ -18,7 +26,16 @@
       "name": "MANASA R",
       "email": "jmanasa2k5@gmail.com",
       "phone": "+91-9392832376",
-      "skills": ["Java", "Python", "HTML", "CSS", "React", "Node.js", "MongoDB", "MySQL"],
+      "skills": [
+        "Java",
+        "Python",
+        "HTML",
+        "CSS",
+        "React",
+        "Node.js",
+        "MongoDB",
+        "MySQL"
+      ],
       "experience_years": 0,
       "education": "B.Tech CSE, The Apollo University, Chittoor"
     }
@@ -30,7 +47,12 @@
       "name": "B D N PRASANTHI",
       "email": "prasanthibadarvada@gmail.com",
       "phone": "+91-9014662359",
-      "skills": ["SQL", "Power BI", "Excel", "Tableau"],
+      "skills": [
+        "SQL",
+        "Power BI",
+        "Excel",
+        "Tableau"
+      ],
       "experience_years": 3,
       "education": "MBA Health care and Hospital Management, School of Management Studies, UOH"
     }
@@ -42,7 +64,14 @@
       "name": "MUJAHID AMIN",
       "email": "mujahidameen205@gmail.com",
       "phone": null,
-      "skills": ["Flutter", "Dart", "Firebase", "Riverpod", "REST API", "Git"],
+      "skills": [
+        "Flutter",
+        "Dart",
+        "Firebase",
+        "Riverpod",
+        "REST API",
+        "Git"
+      ],
       "experience_years": 0,
       "education": "Bachelor of Science in Software Engineering, Bayero University, Kano"
     }
@@ -54,7 +83,14 @@
       "name": "Mohammed Khalil",
       "email": "klilmohammed9@gmail.com",
       "phone": "+201010518801",
-      "skills": ["Flutter", "Dart", "Git", "Firebase", "CI/CD", "Scrum"],
+      "skills": [
+        "Flutter",
+        "Dart",
+        "Git",
+        "Firebase",
+        "CI/CD",
+        "Scrum"
+      ],
       "experience_years": 2,
       "education": "Higher Technological Institute (HTI), B.Tech, Tenth of Ramadan City"
     }
@@ -66,7 +102,14 @@
       "name": "Menna Allah Saed Abd El-hafeze",
       "email": "mena.seaad23@gmail.com",
       "phone": "+201146323243",
-      "skills": ["Flutter", "Dart", "Firebase", "Python", "Java", "Git"],
+      "skills": [
+        "Flutter",
+        "Dart",
+        "Firebase",
+        "Python",
+        "Java",
+        "Git"
+      ],
       "experience_years": 3,
       "education": "Bachelor of Science in Computer Science, Faculty of Science, Alexandria University"
     }
@@ -78,7 +121,14 @@
       "name": "Sowmya Rajarajan",
       "email": "sowmyarajarajan.tech@gmail.com",
       "phone": "+91 9363195180",
-      "skills": ["Java", "Spring Boot", "Hibernate", "MySQL", "PostgreSQL", "Git"],
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "Hibernate",
+        "MySQL",
+        "PostgreSQL",
+        "Git"
+      ],
       "experience_years": 0,
       "education": "B.Tech in Information Technology, Rajalakshmi Engineering College (REC)"
     }
@@ -90,7 +140,15 @@
       "name": "THUPAKULA JAYASHREE",
       "email": "jayashreeshetty250206@gmail.com",
       "phone": "+91 9347005771",
-      "skills": ["Python", "Java", "React", "PostgreSQL", "MySQL", "MongoDB", "Git"],
+      "skills": [
+        "Python",
+        "Java",
+        "React",
+        "PostgreSQL",
+        "MySQL",
+        "MongoDB",
+        "Git"
+      ],
       "experience_years": 2,
       "education": "B.Tech in Computer Science Engineering, The Apollo University"
     }
@@ -102,7 +160,15 @@
       "name": "MUGHAL ARSHAD",
       "email": "arshadmsb@gmail.com",
       "phone": "+91 78421 15953",
-      "skills": ["Python", "FastAPI", "React", "PostgreSQL", "LangChain", "NLP", "Git"],
+      "skills": [
+        "Python",
+        "FastAPI",
+        "React",
+        "PostgreSQL",
+        "LangChain",
+        "NLP",
+        "Git"
+      ],
       "experience_years": 2,
       "education": "B.Tech, The Apollo University, Chittoor"
     }
@@ -114,7 +180,12 @@
       "name": "Niyati Sachdeva",
       "email": "sachdeva.niyati17@gmail.com",
       "phone": "7351873452",
-      "skills": ["Flutter", "Dart", "REST API", "Riverpod"],
+      "skills": [
+        "Flutter",
+        "Dart",
+        "REST API",
+        "Riverpod"
+      ],
       "experience_years": 0,
       "education": "B.Tech, Ajay Kumar Garg Engineering College"
     }
@@ -126,7 +197,13 @@
       "name": "A D ITYA YA DA V",
       "email": "admusic8302@gmail.com",
       "phone": "+91 6386120959",
-      "skills": ["HTML", "CSS", "JavaScript", "Tableau", "Excel"],
+      "skills": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Tableau",
+        "Excel"
+      ],
       "experience_years": 3,
       "education": "Bachelor of Technology, Computer Science, MG Institute of Management and Technology"
     }
@@ -138,7 +215,15 @@
       "name": "ABHIJIT GIRHEPUNJE",
       "email": "abhijit4494@gmail.com",
       "phone": "9405508252",
-      "skills": ["React", "Next.js", "TypeScript", "Node.js", "Docker", "MongoDB", "PostgreSQL"],
+      "skills": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Node.js",
+        "Docker",
+        "MongoDB",
+        "PostgreSQL"
+      ],
       "experience_years": 6,
       "education": "B.Tech, Mumbai University"
     }
@@ -150,7 +235,15 @@
       "name": "ADWAIT PANDE",
       "email": "adwait.kdm@gmail.com",
       "phone": "9284297181",
-      "skills": ["React", "Node.js", "MongoDB", "TypeScript", "Redis", "AWS", "Kubernetes"],
+      "skills": [
+        "React",
+        "Node.js",
+        "MongoDB",
+        "TypeScript",
+        "Redis",
+        "AWS",
+        "Kubernetes"
+      ],
       "experience_years": 0,
       "education": "B.Tech, Indian Institute of Information Technology, Nagpur"
     }
@@ -162,7 +255,15 @@
       "name": "AYUSH KAMBOJ",
       "email": "ayushkambojq51@gmail.com",
       "phone": "+91 7302935627",
-      "skills": ["JavaScript", "TypeScript", "React", "Node.js", "MongoDB", "MySQL", "AWS"],
+      "skills": [
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Node.js",
+        "MongoDB",
+        "MySQL",
+        "AWS"
+      ],
       "experience_years": 1,
       "education": "Bachelor of Engineering in Computer Science, Chitkara University, Punjab"
     }
@@ -174,7 +275,13 @@
       "name": "CHARAN GUBBALA",
       "email": "nameischaran4@gmail.com",
       "phone": "9505823739",
-      "skills": ["Python", "Django", "React", "MySQL", "REST API"],
+      "skills": [
+        "Python",
+        "Django",
+        "React",
+        "MySQL",
+        "REST API"
+      ],
       "experience_years": 2,
       "education": "MCA, Swarnandhra College of Engineering and Technology"
     }
@@ -186,7 +293,14 @@
       "name": "Chintan R. Vekariya",
       "email": "cvekariya16@gmail.com",
       "phone": "94092 84101",
-      "skills": ["React", "Node.js", "MongoDB", "TypeScript", "FastAPI", "Next.js"],
+      "skills": [
+        "React",
+        "Node.js",
+        "MongoDB",
+        "TypeScript",
+        "FastAPI",
+        "Next.js"
+      ],
       "experience_years": 1,
       "education": "Bachelor's Degree, Charotar University of Science and Technology"
     }
@@ -198,7 +312,14 @@
       "name": "Debojeet Mitra",
       "email": "debojeetmitra04@gmail.com",
       "phone": "+91 7860886987",
-      "skills": ["React", "Next.js", "Node.js", "MongoDB", "TypeScript", "JavaScript"],
+      "skills": [
+        "React",
+        "Next.js",
+        "Node.js",
+        "MongoDB",
+        "TypeScript",
+        "JavaScript"
+      ],
       "experience_years": 3,
       "education": "B.Tech in Computer Science (AIML), Pranveer Singh Institute of Technology"
     }
@@ -210,9 +331,15 @@
       "name": "FILIPI SILVESTRINI",
       "email": "filipisilvestrinibotelho@gmail.com",
       "phone": "+55 (11) 93403-6747",
-      "skills": ["HTML", "CSS", "JavaScript", "GitHub", "Java"],
+      "skills": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "GitHub",
+        "Java"
+      ],
       "experience_years": 0,
-      "education": "High School, Colégio Futura Jundiaí"
+      "education": "High School, Col\u00e9gio Futura Jundia\u00ed"
     }
   },
   {
@@ -222,7 +349,15 @@
       "name": "Harish Ghasolia",
       "email": "harishghasolia@gmail.com",
       "phone": "+91 7737902144",
-      "skills": ["TypeScript", "React", "Next.js", "FastAPI", "MongoDB", "PostgreSQL", "Docker"],
+      "skills": [
+        "TypeScript",
+        "React",
+        "Next.js",
+        "FastAPI",
+        "MongoDB",
+        "PostgreSQL",
+        "Docker"
+      ],
       "experience_years": 2,
       "education": "BTech (AI&DS), Maharaja Agrasen Institute of Technology, Delhi"
     }
@@ -234,7 +369,15 @@
       "name": "Harishankar Sharma",
       "email": "sharmahari9589@gmail.com",
       "phone": "9589517945",
-      "skills": ["Node.js", "React", "TypeScript", "AWS", "Docker", "Kubernetes", "MongoDB"],
+      "skills": [
+        "Node.js",
+        "React",
+        "TypeScript",
+        "AWS",
+        "Docker",
+        "Kubernetes",
+        "MongoDB"
+      ],
       "experience_years": 8,
       "education": "B.Sc, Vikram University"
     }
@@ -246,7 +389,14 @@
       "name": "HARSHAL MAHAJAN",
       "email": "mahajanharshal112@gmail.com",
       "phone": "+91 8208119687",
-      "skills": ["Java", "Spring Boot", "React", "MySQL", "MongoDB", "Git"],
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "React",
+        "MySQL",
+        "MongoDB",
+        "Git"
+      ],
       "experience_years": 0,
       "education": "B.Tech, G H Raisoni College of Engineering and Management, Jalgaon"
     }
@@ -258,7 +408,15 @@
       "name": "KUNWAR PRAKASH SINGH",
       "email": "ps4059269@gmail.com",
       "phone": "+91 7985139275",
-      "skills": ["React", "Node.js", "MongoDB", "Next.js", "AWS", "Docker", "TypeScript"],
+      "skills": [
+        "React",
+        "Node.js",
+        "MongoDB",
+        "Next.js",
+        "AWS",
+        "Docker",
+        "TypeScript"
+      ],
       "experience_years": 2,
       "education": "Full Stack Web Development, Masai School"
     }
@@ -282,7 +440,14 @@
       "name": "NEERAJ CHAUDHARY",
       "email": "neerajchaudhary.dab@gmail.com",
       "phone": "7082386631",
-      "skills": ["React", "Next.js", "TypeScript", "Node.js", "MongoDB", "REST API"],
+      "skills": [
+        "React",
+        "Next.js",
+        "TypeScript",
+        "Node.js",
+        "MongoDB",
+        "REST API"
+      ],
       "experience_years": 4,
       "education": "B.Tech, Maharaja Agrasen University"
     }
@@ -294,7 +459,14 @@
       "name": "Prince Kumar",
       "email": "pkryadav9304@gmail.com",
       "phone": "+91 9507750615",
-      "skills": ["TypeScript", "JavaScript", "React", "Node.js", "MongoDB", "SQL"],
+      "skills": [
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Node.js",
+        "MongoDB",
+        "SQL"
+      ],
       "experience_years": 1,
       "education": "B.Tech CSE, Sandip University"
     }
@@ -306,7 +478,15 @@
       "name": "Sangeeta Mishra",
       "email": "mishrasangeeta944@gmail.com",
       "phone": "+91-89262-74579",
-      "skills": ["JavaScript", "TypeScript", "React", "Node.js", "PostgreSQL", "MongoDB", "AWS"],
+      "skills": [
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Node.js",
+        "PostgreSQL",
+        "MongoDB",
+        "AWS"
+      ],
       "experience_years": 1,
       "education": "B.Tech CSE, Government College of Engineering Kalahandi"
     }
@@ -318,7 +498,14 @@
       "name": "Saurabh Kumar",
       "email": "saurabh-kumar-96667220a@gmail.com",
       "phone": "9540399865",
-      "skills": ["JavaScript", "React", "Node.js", "Firebase", "MongoDB", "PostgreSQL"],
+      "skills": [
+        "JavaScript",
+        "React",
+        "Node.js",
+        "Firebase",
+        "MongoDB",
+        "PostgreSQL"
+      ],
       "experience_years": 1,
       "education": "B.Tech ECE, Ambedkar Institute of Advanced Communication Technologies"
     }
@@ -330,7 +517,14 @@
       "name": "Sarvesh Sahane",
       "email": "sarveshsahane07@gmail.com",
       "phone": "+91 9356972944",
-      "skills": ["Python", "SQL", "Power BI", "Node.js", "AWS", "Angular"],
+      "skills": [
+        "Python",
+        "SQL",
+        "Power BI",
+        "Node.js",
+        "AWS",
+        "Angular"
+      ],
       "experience_years": 1,
       "education": "B.Tech, Brihan Maharashtra College of Commerce"
     }
@@ -342,7 +536,15 @@
       "name": "Shantanu Bokey",
       "email": "shantanubokey1234@gmail.com",
       "phone": "+91 8600788401",
-      "skills": ["Java", "TypeScript", "React", "Node.js", "PostgreSQL", "AWS", "Docker"],
+      "skills": [
+        "Java",
+        "TypeScript",
+        "React",
+        "Node.js",
+        "PostgreSQL",
+        "AWS",
+        "Docker"
+      ],
       "experience_years": 2,
       "education": "B.Tech CSE, Rajarambapu Institute of Technology"
     }
@@ -354,7 +556,14 @@
       "name": "Vinit Tiwari",
       "email": "vinittiwari4596@gmail.com",
       "phone": "+91 6392935884",
-      "skills": ["JavaScript", "React", "Node.js", "MongoDB", "MySQL", "REST API"],
+      "skills": [
+        "JavaScript",
+        "React",
+        "Node.js",
+        "MongoDB",
+        "MySQL",
+        "REST API"
+      ],
       "experience_years": 5,
       "education": "B.Tech CSE, Abdul Kalam Technical University"
     }
@@ -366,7 +575,15 @@
       "name": "Shital B. Savant",
       "email": "shitalsavant89@gmail.com",
       "phone": "+91-8320234362",
-      "skills": ["Java", "Spring Boot", "Node.js", "REST API", "MySQL", "React", "Git"],
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "Node.js",
+        "REST API",
+        "MySQL",
+        "React",
+        "Git"
+      ],
       "experience_years": 1,
       "education": "MCA, Amity University"
     }
@@ -378,7 +595,15 @@
       "name": "Yash Pratap",
       "email": "yashrajathakur@gmail.com",
       "phone": "8303056260",
-      "skills": ["Java", "Spring Boot", "React", "Angular", "MySQL", "REST API", "JWT"],
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "React",
+        "Angular",
+        "MySQL",
+        "REST API",
+        "JWT"
+      ],
       "experience_years": 1,
       "education": "B.Tech EEE, Ajay Kumar Garg Engineering College"
     }
@@ -390,7 +615,14 @@
       "name": "Arjun Sharma",
       "email": "arjunsharma@gmail.com",
       "phone": "+91 9800000001",
-      "skills": ["JavaScript", "React", "Node.js", "MongoDB", "Express.js", "Git"],
+      "skills": [
+        "JavaScript",
+        "React",
+        "Node.js",
+        "MongoDB",
+        "Express.js",
+        "Git"
+      ],
       "experience_years": 1,
       "education": "B.Tech, IIT Madras"
     }
@@ -402,7 +634,13 @@
       "name": "Priya Nair",
       "email": "priyanair@gmail.com",
       "phone": "+91 9800000002",
-      "skills": ["Python", "FastAPI", "PostgreSQL", "Docker", "AWS"],
+      "skills": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "Docker",
+        "AWS"
+      ],
       "experience_years": 1,
       "education": "B.Tech, IIT Madras"
     }
@@ -414,7 +652,12 @@
       "name": "Rahul Verma",
       "email": "rahulverma@gmail.com",
       "phone": "+91 9800000003",
-      "skills": ["Java", "Spring Boot", "MySQL", "REST API"],
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "MySQL",
+        "REST API"
+      ],
       "experience_years": 4,
       "education": "B.Tech, IIT Madras"
     }
@@ -426,7 +669,13 @@
       "name": "Neha Gupta",
       "email": "nehagupta@gmail.com",
       "phone": "+91 9800000004",
-      "skills": ["Python", "Angular", "TypeScript", "Firebase", "CI/CD"],
+      "skills": [
+        "Python",
+        "Angular",
+        "TypeScript",
+        "Firebase",
+        "CI/CD"
+      ],
       "experience_years": 1,
       "education": "B.Tech, IIT Madras"
     }
@@ -438,7 +687,13 @@
       "name": "Karan Mehta",
       "email": "karanmehta@gmail.com",
       "phone": "+91 9800000005",
-      "skills": ["Python", "FastAPI", "PostgreSQL", "Docker", "AWS"],
+      "skills": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "Docker",
+        "AWS"
+      ],
       "experience_years": 1,
       "education": "B.Tech, IIT Madras"
     }
@@ -450,7 +705,12 @@
       "name": "Ananya Rao",
       "email": "ananyarao@gmail.com",
       "phone": "+91 9800000006",
-      "skills": ["TensorFlow", "Pandas", "Scikit-learn", "SQL"],
+      "skills": [
+        "TensorFlow",
+        "Pandas",
+        "Scikit-learn",
+        "SQL"
+      ],
       "experience_years": 4,
       "education": "B.Tech, IIT Madras"
     }
@@ -462,7 +722,14 @@
       "name": "Vikram Singh",
       "email": "vikramsingh@gmail.com",
       "phone": "+91 9800000007",
-      "skills": ["Angular", "TypeScript", "Firebase", "CI/CD", "REST API", "Git"],
+      "skills": [
+        "Angular",
+        "TypeScript",
+        "Firebase",
+        "CI/CD",
+        "REST API",
+        "Git"
+      ],
       "experience_years": 1,
       "education": "B.Tech, IIT Madras"
     }
@@ -474,7 +741,14 @@
       "name": "Ishita Roy",
       "email": "ishitaroy@gmail.com",
       "phone": "+91 9800000008",
-      "skills": ["TensorFlow", "Pandas", "Scikit-learn", "SQL", "REST API", "Git"],
+      "skills": [
+        "TensorFlow",
+        "Pandas",
+        "Scikit-learn",
+        "SQL",
+        "REST API",
+        "Git"
+      ],
       "experience_years": 1,
       "education": "B.Tech, IIT Madras"
     }
@@ -486,7 +760,14 @@
       "name": "Siddharth Jain",
       "email": "siddharthjain@gmail.com",
       "phone": "+91 9800000009",
-      "skills": ["JavaScript", "React", "Node.js", "MongoDB", "Express.js", "Git"],
+      "skills": [
+        "JavaScript",
+        "React",
+        "Node.js",
+        "MongoDB",
+        "Express.js",
+        "Git"
+      ],
       "experience_years": 4,
       "education": "B.Tech, IIT Madras"
     }
@@ -498,7 +779,12 @@
       "name": "Kavya Joshi",
       "email": "kavyajoshi@gmail.com",
       "phone": "+91 9800000010",
-      "skills": ["Java", "Spring Boot", "MySQL", "REST API"],
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "MySQL",
+        "REST API"
+      ],
       "experience_years": 1,
       "education": "B.Tech, IIT Madras"
     }
@@ -510,7 +796,12 @@
       "name": "Rohit Bansal",
       "email": "rohitbansal@gmail.com",
       "phone": "+91 9800000011",
-      "skills": ["Angular", "TypeScript", "Firebase", "CI/CD"],
+      "skills": [
+        "Angular",
+        "TypeScript",
+        "Firebase",
+        "CI/CD"
+      ],
       "experience_years": 1,
       "education": "B.Tech, IIT Madras"
     }
@@ -522,7 +813,12 @@
       "name": "Meera Kapoor",
       "email": "meerakapoor@gmail.com",
       "phone": "+91 9800000012",
-      "skills": ["Java", "Spring Boot", "MySQL", "REST API"],
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "MySQL",
+        "REST API"
+      ],
       "experience_years": 4,
       "education": "B.Tech, IIT Madras"
     }
@@ -534,7 +830,14 @@
       "name": "Tanvi Malhotra",
       "email": "tanvimalhotra@gmail.com",
       "phone": "+91 9800000013",
-      "skills": ["TensorFlow", "Pandas", "Scikit-learn", "SQL", "REST API", "Git"],
+      "skills": [
+        "TensorFlow",
+        "Pandas",
+        "Scikit-learn",
+        "SQL",
+        "REST API",
+        "Git"
+      ],
       "experience_years": 1,
       "education": "B.Tech, IIT Madras"
     }
@@ -546,7 +849,14 @@
       "name": "Aditya Kulkarni",
       "email": "adityakulkarni@gmail.com",
       "phone": "+91 9800000014",
-      "skills": ["Node.js", "JavaScript", "React", "MongoDB", "Express.js", "Git"],
+      "skills": [
+        "Node.js",
+        "JavaScript",
+        "React",
+        "MongoDB",
+        "Express.js",
+        "Git"
+      ],
       "experience_years": 1,
       "education": "B.Tech, IIT Madras"
     }
@@ -558,7 +868,13 @@
       "name": "Pooja Patel",
       "email": "poojapatel@gmail.com",
       "phone": "+91 9800000015",
-      "skills": ["Python", "FastAPI", "PostgreSQL", "Docker", "AWS"],
+      "skills": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "Docker",
+        "AWS"
+      ],
       "experience_years": 4,
       "education": "B.Tech, IIT Madras"
     }
@@ -570,7 +886,12 @@
       "name": "Arjun Menon",
       "email": "arjunmenon@gmail.com",
       "phone": "+91 9800000016",
-      "skills": ["Java", "Spring Boot", "MySQL", "REST API"],
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "MySQL",
+        "REST API"
+      ],
       "experience_years": 1,
       "education": "B.Tech, IIT Madras"
     }
@@ -582,7 +903,14 @@
       "name": "Nitin Agarwal",
       "email": "nitinagarwal@gmail.com",
       "phone": "+91 9800000017",
-      "skills": ["JavaScript", "React", "Node.js", "MongoDB", "Express.js", "Git"],
+      "skills": [
+        "JavaScript",
+        "React",
+        "Node.js",
+        "MongoDB",
+        "Express.js",
+        "Git"
+      ],
       "experience_years": 1,
       "education": "B.Tech, IIT Madras"
     }
@@ -594,7 +922,13 @@
       "name": "Sneha Iyer",
       "email": "snehaiyer@gmail.com",
       "phone": "+91 9800000018",
-      "skills": ["TensorFlow", "Pandas", "Scikit-learn", "SQL", "Angular"],
+      "skills": [
+        "TensorFlow",
+        "Pandas",
+        "Scikit-learn",
+        "SQL",
+        "Angular"
+      ],
       "experience_years": 4,
       "education": "B.Tech, IIT Madras"
     }
