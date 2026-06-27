@@ -11,10 +11,9 @@
 #   - Model tags must be installed Ollama models (see ReadME/CLAUDE.md).
 
 # ---------------------------------------------------------------- G1 parser
-
 parser_main:
-  version: 3
-  description: "Main resume parsing prompt with JSON output."
+  version: 4
+  description: "Main resume parsing prompt with JSON output. v4: improved education/experience extraction accuracy."
   model: gemma3:4b
   temperature: 0.1
   json_mode: true
@@ -34,21 +33,38 @@ parser_main:
       "parse_confidence": <float 0-1, how confident you are the resume is well-formed>
     }}
 
-    Rules:
-    - If experience years are not explicitly stated, infer from earliest job date.
-    - Normalize skills: 'React.js' -> 'React', 'Postgres' -> 'PostgreSQL'.
-    - DO NOT INCLUDE soft skills like 'teamwork' or 'leadership' in the skills array.
+    EDUCATION RULES (read carefully):
+    - Only extract education that is EXPLICITLY written in the resume text below.
+    - NEVER invent, assume, or default to any institution name (e.g. do NOT guess "IIT Madras" or any other school) if it is not literally present in the text.
+    - Pick the HIGHEST degree mentioned (e.g. prefer "MCA" over "B.Sc" if both appear).
+    - Format as "<degree>, <institution>" exactly as named in the resume.
+    - If no education section is found in the text, return an empty string "".
+
+    EXPERIENCE_YEARS RULES (read carefully):
+    - Look for explicit statements like "X years of experience" and use that number directly if present.
+    - If not explicit, calculate experience ONLY from listed job/internship date ranges (e.g. "Jan 2023 - Mar 2024" = ~0.2 years). Sum all professional roles, EXCLUDING unpaid coursework or academic projects.
+    - Do NOT count time spent only studying (degree duration) as experience.
+    - If there is no work experience section at all, return 0.
+    - Round to 1 decimal place.
+
+    SKILLS RULES (read carefully):
+    - Extract ONLY skills that are explicitly listed under skills/technical skills/tools sections, OR clearly named technologies mentioned in project/experience bullet points.
+    - Normalize common variants: 'React.js' -> 'React', 'Postgres' -> 'PostgreSQL', 'JS' -> 'JavaScript', 'Node JS' -> 'Node.js'.
+    - DO NOT include soft skills like 'teamwork', 'leadership', 'communication' in the skills array.
+    - DO NOT invent skills that are not mentioned anywhere in the resume text.
+
+    GENERAL RULES:
     - If the email is missing or malformed, return parse_confidence < 0.5.
+    - If any field cannot be confidently determined from the text, use null (for optional fields) or an empty value rather than guessing.
     - Output JSON only. No markdown, no explanation.
 
     Resume:
-    ```
     {resume_text}
-    ```
-  changelog:
+    changelog:
     - "v1: initial extraction prompt"
     - "v2: added skill normalization rules + soft-skill exclusion"
     - "v3: lowered temperature to 0.1, locked output schema for Ollama gemma3:4b"
+    - "v4: added strict EDUCATION/EXPERIENCE_YEARS/SKILLS rules to fix hallucination and improve accuracy on real-world resumes (P0 fix)"
 
 parser_retry_fix:
   version: 1
