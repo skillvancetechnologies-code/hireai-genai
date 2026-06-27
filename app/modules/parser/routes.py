@@ -17,7 +17,7 @@ from app.modules.parser.service import parse_resume_file
 log = logging.getLogger(__name__)
 router = APIRouter(prefix="/parse", tags=["parser"])
 
-_ALLOWED_SUFFIXES = {".pdf", ".docx", ".doc", ".jpg", ".jpeg", ".png"}
+_ALLOWED_SUFFIXES = {".pdf", ".docx", ".jpg", ".jpeg", ".png"}
 
 
 @router.post("")

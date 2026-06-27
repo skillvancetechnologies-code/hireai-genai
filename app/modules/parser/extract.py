@@ -9,13 +9,15 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
+from pytesseract import pytesseract
+
 
 def extract_text(file_path: str) -> str:
     """Extract plain text from a PDF, DOCX, JPG, or PNG file."""
     suffix = Path(file_path).suffix.lower()
     if suffix == ".pdf":
         return _extract_pdf(file_path)
-    elif suffix in (".docx", ".doc"):
+    elif suffix in (".docx"):
         return _extract_docx(file_path)
     elif suffix in (".jpg", ".jpeg", ".png"):
         return _extract_image(file_path)
@@ -46,8 +48,10 @@ def _extract_image(path: str) -> str:
     """Extract text from JPG or PNG using OCR (pytesseract)."""
     from PIL import Image
     import pytesseract
-
-    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+    import os
+    
+    tesseract_path = os.getenv("TESSERACT_CMD", r'C:\Program Files\Tesseract-OCR\tesseract.exe')
+    pytesseract.pytesseract.tesseract_cmd = tesseract_path
     image = Image.open(path)
     text = pytesseract.image_to_string(image)
     return _clean_text(text)
