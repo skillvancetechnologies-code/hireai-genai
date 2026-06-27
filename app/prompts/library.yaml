@@ -37,6 +37,7 @@ parser_main:
     - Only extract education that is EXPLICITLY written in the resume text below.
     - NEVER invent, assume, or default to any institution name (e.g. do NOT guess "IIT Madras" or any other school) if it is not literally present in the text.
     - Pick the HIGHEST degree mentioned (e.g. prefer "MCA" over "B.Sc" if both appear).
+    - The "education" field MUST be a single string, NEVER an array or list, even if multiple schools are mentioned. Combine into one string if needed, e.g. "B.Tech, XYZ University".
     - Format as "<degree>, <institution>" exactly as named in the resume.
     - If no education section is found in the text, return an empty string "".
 

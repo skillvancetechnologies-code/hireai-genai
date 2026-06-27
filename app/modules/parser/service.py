@@ -41,6 +41,19 @@ def parse_resume_file(file_path: str) -> dict:
     data = _call_with_retry(rendered, model=prompt_spec.model, temperature=prompt_spec.temperature)
 
     data["skills"] = normalize_skills(data.get("skills") or [])
+    
+      # Safety-net: LLM occasionally returns education as a list instead of a string.
+    # Coerce to a single string so Pydantic validation doesn't fail (P0/P1 fix).
+    education = data.get("education")
+    if isinstance(education, list):
+        data["education"] = ", ".join(str(e) for e in education if e)
+    elif education is None:
+        data["education"] = ""
+
+    # Safety-net: experience_years should always be a number, never None.
+    if data.get("experience_years") is None:
+        data["experience_years"] = 0
+
     data.setdefault("raw_text", raw_text)
     data.setdefault("projects", [])
     data.setdefault("phone", None)
